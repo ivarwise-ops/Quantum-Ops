@@ -1,1 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quantum Ops Elite</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    body { background: linear-gradient(135deg, #0f172a, #1e2937); }
+  </style>
+</head>
+<body class="min-h-screen flex items-center justify-center text-white">
+  <div class="max-w-md w-full p-8">
+    <div class="text-center mb-10">
+      <h1 class="text-4xl font-bold mb-2">QUANTUM OPS</h1>
+      <p class="text-purple-400">Elite Command Center</p>
+    </div>
 
+    <!-- Login Form -->
+    <div id="loginForm" class="bg-slate-900 p-8 rounded-2xl">
+      <h2 class="text-2xl font-semibold mb-6 text-center">Welcome Back, Commander</h2>
+      <input id="loginEmail" type="email" placeholder="Gmail Address" class="w-full p-4 mb-4 bg-slate-800 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500">
+      <input id="loginPassword" type="password" placeholder="Password" class="w-full p-4 mb-6 bg-slate-800 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500">
+      <button onclick="login()" class="w-full bg-purple-600 hover:bg-purple-700 py-4 rounded-xl font-semibold">Login</button>
+      <p class="text-center mt-6 text-sm">Don't have an account? 
+        <span onclick="toggleForms()" class="text-purple-400 cursor-pointer">Sign Up</span>
+      </p>
+    </div>
+
+    <!-- Signup Form -->
+    <div id="signupForm" class="bg-slate-900 p-8 rounded-2xl hidden">
+      <h2 class="text-2xl font-semibold mb-6 text-center">Create Command Account</h2>
+      <input id="signupEmail" type="email" placeholder="Gmail Address" class="w-full p-4 mb-4 bg-slate-800 rounded-xl">
+      <input id="signupUsername" type="text" placeholder="Username" class="w-full p-4 mb-4 bg-slate-800 rounded-xl">
+      <input id="signupPhone" type="tel" placeholder="Phone Number" class="w-full p-4 mb-4 bg-slate-800 rounded-xl">
+      <input id="signupPassword" type="password" placeholder="Password" class="w-full p-4 mb-6 bg-slate-800 rounded-xl">
+      <button onclick="signup()" class="w-full bg-purple-600 hover:bg-purple-700 py-4 rounded-xl font-semibold">Create Account</button>
+      <p class="text-center mt-6 text-sm">Already have an account? 
+        <span onclick="toggleForms()" class="text-purple-400 cursor-pointer">Login</span>
+      </p>
+    </div>
+  </div>
+
+  <script>
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx8oY8vqiM3bCZbVjv4dPPyuSkYq_CdU4qIhlWpWNt26Aq0AEmVM781i2BYKJjuqN6W2g/exec";
+
+    function toggleForms() {
+      document.getElementById('loginForm').classList.toggle('hidden');
+      document.getElementById('signupForm').classList.toggle('hidden');
+    }
+
+    async function signup() {
+      const data = {
+        action: "signup",
+        email: document.getElementById('signupEmail').value,
+        username: document.getElementById('signupUsername').value,
+        phone: document.getElementById('signupPhone').value,
+        password: document.getElementById('signupPassword').value
+      };
+
+      const res = await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify(data) });
+      const result = await res.json();
+      alert(result.success ? "Account created! Now login." : result.error);
+    }
+
+    async function login() {
+      const data = {
+        action: "login",
+        email: document.getElementById('loginEmail').value,
+        password: document.getElementById('loginPassword').value
+      };
+
+      const res = await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify(data) });
+      const result = await res.json();
+
+      if (result.success) {
+        localStorage.setItem('userEmail', data.email);
+        window.location.href = "dashboard.html";
+      } else {
+        alert(result.error);
+      }
+    }
+  </script>
+</body>
+</html>
