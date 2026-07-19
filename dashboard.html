@@ -1,237 +1,161 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Quantum Ops Elite - Command Center</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-  <style>
-    body { background: #0f172a; }
-    .card { background: #1e2937; }
-    .sidebar-active { background: #6b21a8; color: white; }
-  </style>
-</head>
-<body class="text-white flex h-screen overflow-hidden">
-  <!-- Sidebar -->
-  <div class="w-64 bg-slate-950 p-4 flex flex-col">
-    <div class="flex items-center gap-3 mb-10">
-      <div class="text-3xl">⚡</div>
-      <div>
-        <h1 class="text-2xl font-bold">QUANTUM OPS</h1>
-        <p class="text-xs text-purple-400">ELITE</p>
-      </div>
-    </div>
-    
-    <nav class="space-y-1 flex-1">
-      <a href="#" class="sidebar-active flex items-center gap-3 px-4 py-3 rounded-xl"><i class="fas fa-command"></i> Command Center</a>
-      <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-slate-800"><i class="fas fa-robot"></i> AI CEO <span class="text-xs bg-green-500 px-1.5 rounded">NEW</span></a>
-      <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-slate-800"><i class="fas fa-users"></i> CRM</a>
-      <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-slate-800"><i class="fas fa-user-tie"></i> HR</a>
-      <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-slate-800"><i class="fas fa-box"></i> Inventory</a>
-      <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-slate-800"><i class="fas fa-calculator"></i> Accounting</a>
-      <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-slate-800"><i class="fas fa-handshake"></i> Sales</a>
-      <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-slate-800"><i class="fas fa-project-diagram"></i> Projects</a>
-      <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-slate-800"><i class="fas fa-folder"></i> Documents</a>
-      <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-slate-800"><i class="fas fa-users-cog"></i> Staff</a>
-      <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-slate-800"><i class="fas fa-chart-bar"></i> Analytics</a>
-      <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-slate-800"><i class="fas fa-calendar"></i> Calendar</a>
-      <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-slate-800"><i class="fas fa-tasks"></i> Tasks</a>
-      <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-slate-800"><i class="fas fa-bell"></i> Notifications</a>
-    </nav>
-
-    <div class="mt-auto pt-6 border-t border-slate-700">
-      <div class="bg-gradient-to-br from-purple-600 to-indigo-600 p-4 rounded-2xl">
-        <p class="font-semibold">Upgrade to Elite</p>
-        <p class="text-sm opacity-90">Unlock AI tools & advanced modules</p>
-        <button class="mt-4 bg-white text-black text-sm font-bold px-6 py-2 rounded-xl w-full">Upgrade Now →</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Main Content -->
-  <div class="flex-1 overflow-auto">
-    <!-- Top Nav -->
-    <div class="bg-slate-900 border-b border-slate-700 px-8 py-4 flex items-center justify-between">
-      <div>
-        <h2 class="text-xl font-semibold">Welcome back, Commander 👑</h2>
-        <p class="text-slate-400 text-sm">Here's what's happening in your empire today.</p>
-      </div>
-      <div class="flex items-center gap-6">
-        <div class="relative">
-          <input type="text" placeholder="Search anything..." class="bg-slate-800 w-80 px-5 py-3 rounded-2xl text-sm focus:outline-none">
-        </div>
-        <button class="relative"><i class="fas fa-bell text-xl"></i><span class="absolute -top-1 -right-1 bg-red-500 text-xs px-1 rounded-full">3</span></button>
-        <div class="flex items-center gap-3">
-          <div class="w-9 h-9 bg-purple-600 rounded-full"></div>
-          <div>
-            <p class="text-sm font-medium">David John</p>
-            <p class="text-xs text-slate-500">Admin</p>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="p-8">
-      <!-- Metrics Cards -->
-      <div class="grid grid-cols-4 gap-6 mb-8">
-        <div class="card p-6 rounded-3xl">
-          <div class="flex justify-between">
-            <div>
-              <p class="text-slate-400 text-sm">Total Revenue</p>
-              <p id="totalRevenue" class="text-3xl font-bold mt-2">$125,750</p>
-            </div>
-            <div class="text-green-400">↑18.6%</div>
-          </div>
-        </div>
-        <div class="card p-6 rounded-3xl">
-          <div class="flex justify-between">
-            <div>
-              <p class="text-slate-400 text-sm">Total Profit</p>
-              <p id="totalProfit" class="text-3xl font-bold mt-2">$32,850</p>
-            </div>
-            <div class="text-green-400">↑21.4%</div>
-          </div>
-        </div>
-        <div class="card p-6 rounded-3xl">
-          <div class="flex justify-between">
-            <div>
-              <p class="text-slate-400 text-sm">Total Sales</p>
-              <p id="totalSales" class="text-3xl font-bold mt-2">$98,500</p>
-            </div>
-            <div class="text-green-400">↑16.2%</div>
-          </div>
-        </div>
-        <div class="card p-6 rounded-3xl">
-          <div class="flex justify-between">
-            <div>
-              <p class="text-slate-400 text-sm">Outstanding Invoices</p>
-              <p id="outstanding" class="text-3xl font-bold mt-2">$24,650</p>
-            </div>
-            <div class="text-red-400">↓8.5%</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Charts Row -->
-      <div class="grid grid-cols-7 gap-6">
-        <!-- Business Overview -->
-        <div class="col-span-5 card p-6 rounded-3xl">
-          <div class="flex justify-between mb-6">
-            <div>
-              <h3 class="font-semibold">Business Overview</h3>
-              <p class="text-sm text-slate-400">Your business performance at a glance</p>
-            </div>
-            <select class="bg-slate-800 px-4 py-2 rounded-xl">
-              <option>This Year</option>
-            </select>
-          </div>
-          <canvas id="overviewChart" height="100"></canvas>
-        </div>
-
-        <!-- Revenue by Module -->
-        <div class="col-span-2 card p-6 rounded-3xl">
-          <h3 class="font-semibold mb-6">Revenue by Module</h3>
-          <canvas id="revenueDoughnut" height="220"></canvas>
-        </div>
-      </div>
-
-      <!-- Module Overview + AI CEO -->
-      <div class="grid grid-cols-12 gap-6 mt-8">
-        <!-- Modules -->
-        <div class="col-span-8 card p-6 rounded-3xl">
-          <h3 class="font-semibold mb-6">Module Overview</h3>
-          <div id="modulesGrid" class="grid grid-cols-4 gap-4">
-            <!-- Populated by JS -->
-          </div>
-        </div>
-
-        <!-- AI CEO -->
-        <div class="col-span-4 card p-6 rounded-3xl bg-gradient-to-br from-purple-900 to-indigo-950">
-          <div class="flex items-center gap-3 mb-6">
-            <div class="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-500 rounded-2xl flex items-center justify-center text-2xl">🤖</div>
-            <div>
-              <p class="font-bold">AI CEO <span class="text-xs bg-blue-500 px-2 py-0.5 rounded">BETA</span></p>
-              <p class="text-sm text-purple-300">Your Business Advisor</p>
-            </div>
-          </div>
-          <div class="bg-slate-900/50 p-4 rounded-2xl mb-6 text-sm">
-            Good morning, Commander! I've analyzed your business data...
-          </div>
-          <div class="space-y-3 text-sm">
-            <button onclick="askAI('Why are sales down?')" class="w-full text-left bg-slate-900 hover:bg-slate-800 p-3 rounded-xl">Why are sales down?</button>
-            <button onclick="askAI('Who owes me money?')" class="w-full text-left bg-slate-900 hover:bg-slate-800 p-3 rounded-xl">Who owes me money?</button>
-          </div>
-          <input id="aiInput" placeholder="Ask AI CEO anything..." class="mt-6 w-full bg-slate-900 p-4 rounded-2xl">
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Right Sidebar (Quick Actions & Reminders) -->
-  <div class="w-80 bg-slate-950 border-l border-slate-700 p-6 overflow-auto">
-    <h3 class="font-semibold mb-4">Quick Actions</h3>
-    <div class="grid grid-cols-2 gap-4">
-      <button class="bg-slate-900 hover:bg-slate-800 p-4 rounded-2xl text-center">Add Customer</button>
-      <button class="bg-slate-900 hover:bg-slate-800 p-4 rounded-2xl text-center">Create Invoice</button>
-      <!-- more buttons -->
-    </div>
-
-    <h3 class="font-semibold mt-10 mb-4">Upcoming Reminders</h3>
-    <div class="space-y-4 text-sm">
-      <div class="flex gap-3">
-        <div class="text-green-400">📅</div>
-        <div>Payment from ABC Corp</div>
-      </div>
-    </div>
-
-    <div class="mt-10">
-      <div class="flex justify-between items-center mb-3">
-        <h3 class="font-semibold">Business Health Score</h3>
-        <span id="healthScore" class="text-4xl font-bold text-green-400">92%</span>
-      </div>
-      <div class="h-2 bg-slate-700 rounded-full overflow-hidden">
-        <div class="h-full w-[92%] bg-green-400"></div>
-      </div>
-    </div>
-  </div>
-
-  <script>
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx8oY8vqiM3bCZbVjv4dPPyuSkYq_CdU4qIhlWpWNt26Aq0AEmVM781i2BYKJjuqN6W2g/exec";
-    const userEmail = localStorage.getItem('userEmail');
-
-    if (!userEmail) window.location.href = "index.html";
-
-    // Sample charts for now (will connect to real data next)
-    function initCharts() {
-      new Chart(document.getElementById('overviewChart'), {
-        type: 'line',
-        data: {
-          labels: ['Jan','Feb','Mar','Apr','May','Jun','Jul'],
-          datasets: [
-            { label: 'Revenue', data: [40000,50000,55000,70000,85000,90000,80000], borderColor: '#a855f7', tension: 0.4 },
-            { label: 'Profit', data: [15000,22000,28000,35000,48000,52000,65000], borderColor: '#22c55e', tension: 0.4 },
-            { label: 'Expenses', data: [12000,18000,22000,28000,35000,40000,42000], borderColor: '#f97316', tension: 0.4 }
-          ]
-        },
-        options: { responsive: true, plugins: { legend: { display: true } } }
-      });
-
-      new Chart(document.getElementById('revenueDoughnut'), {
-        type: 'doughnut',
-        data: {
-          labels: ['Sales', 'Services', 'Products', 'Projects'],
-          datasets: [{ data: [40,25,20,15], backgroundColor: ['#a855f7','#22c55e','#eab308','#ec4899'] }]
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuantumOps — Core Command</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { background-color: #0B0F19; font-family: system-ui, sans-serif; }
+        .glass-card {
+            background: rgba(19, 27, 46, 0.55);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.06);
         }
-      });
-    }
+    </style>
+</head>
+<body class="text-slate-100 min-h-screen relative overflow-x-hidden">
 
-    window.onload = () => {
-      initCharts();
-      // TODO: fetch real data from SCRIPT_URL
-    };
-  </script>
+    <!-- Ambient Visual Glow Vectors -->
+    <div class="absolute top-[-10%] left-[-10%] w-[600px] h-[600px] bg-indigo-500/5 rounded-full blur-[140px] pointer-events-none"></div>
+    <div class="absolute bottom-[-10%] right-[-10%] w-[600px] h-[600px] bg-emerald-500/5 rounded-full blur-[140px] pointer-events-none"></div>
+
+    <div class="flex min-h-screen">
+        <!-- SIDEBAR NAVIGATION PANEL -->
+        <aside class="w-64 glass-card border-r border-slate-800/60 p-6 flex flex-col justify-between hidden lg:flex shrink-0">
+            <div>
+                <!-- Brand Title Identification -->
+                <div class="flex items-center gap-3 mb-10">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 to-emerald-500 flex items-center justify-center shadow-md">
+                        <i class="fa-solid fa-terminal text-white text-md"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-md font-bold tracking-tight">QUANTUM<span class="text-indigo-400 font-extrabold ml-0.5">OPS</span></h1>
+                        <p class="text-[9px] text-emerald-400 font-bold tracking-widest uppercase"><i class="fa-solid fa-sparkles text-[7px] mr-0.5"></i> Elite Suite</p>
+                    </div>
+                </div>
+
+                <!-- Main Module List Selection -->
+                <nav class="space-y-1">
+                    <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-xl bg-indigo-600/10 text-indigo-400 border border-indigo-500/20 font-medium text-xs transition-all">
+                        <i class="fa-solid fa-chart-pie w-4 text-center"></i> Core Dashboard
+                    </a>
+                    <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:bg-slate-800/30 hover:text-slate-200 text-xs transition-all">
+                        <i class="fa-solid fa-users w-4 text-center"></i> CRM / Leads Matrix
+                    </a>
+                    <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:bg-slate-800/30 hover:text-slate-200 text-xs transition-all">
+                        <i class="fa-solid fa-file-invoice-dollar w-4 text-center"></i> Financial Invoices
+                    </a>
+                    <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:bg-slate-800/30 hover:text-slate-200 text-xs transition-all">
+                        <i class="fa-solid fa-cubes w-4 text-center"></i> Stock Inventory
+                    </a>
+                    <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:bg-slate-800/30 hover:text-slate-200 text-xs transition-all">
+                        <i class="fa-solid fa-user-tie w-4 text-center"></i> Human Resources
+                    </a>
+                </nav>
+            </div>
+
+            <!-- Profile Matrix Frame Footer -->
+            <div class="flex items-center gap-3 pt-4 border-t border-slate-800/60">
+                <div class="w-9 h-9 rounded-full bg-slate-800 flex items-center justify-center text-slate-200 font-bold border border-slate-700 text-xs">IW</div>
+                <div>
+                    <h4 class="text-xs font-semibold text-slate-200">Ivar Wise</h4>
+                    <p class="text-[10px] text-slate-500">System Architect</p>
+                </div>
+            </div>
+        </aside>
+
+        <!-- DASHBOARD CONTAINER INTERFACE -->
+        <main class="flex-1 p-6 lg:p-10 max-w-7xl mx-auto space-y-8 w-full overflow-y-auto">
+            <!-- Header Identity Matrix -->
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div>
+                    <h2 class="text-xl lg:text-2xl font-bold tracking-tight">System Operational Hub</h2>
+                    <p class="text-xs lg:text-sm text-slate-400">Real-time terminal environment configuration diagnostics.</p>
+                </div>
+                <div class="flex items-center">
+                    <div class="glass-card px-3 py-2 rounded-xl flex items-center gap-2 text-[11px] font-bold text-emerald-400 bg-emerald-500/5">
+                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span> NETWORK ENGINE ACTIVE
+                    </div>
+                </div>
+            </div>
+
+            <!-- PERFORMANCE KPI MATRIX ROWS -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div class="glass-card p-5 rounded-xl relative overflow-hidden group">
+                    <p class="text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1">Gross Revenue Matrix</p>
+                    <h3 class="text-2xl font-bold tracking-tight">$124,500</h3>
+                    <div class="text-[10px] font-medium text-emerald-400 flex items-center gap-1 mt-2"><i class="fa-solid fa-arrow-trend-up"></i> +14.2% Growth Index</div>
+                </div>
+                <div class="glass-card p-5 rounded-xl relative overflow-hidden group">
+                    <p class="text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1">Conversion Analytics</p>
+                    <h3 class="text-2xl font-bold tracking-tight">24.8%</h3>
+                    <div class="text-[10px] font-medium text-emerald-400 flex items-center gap-1 mt-2"><i class="fa-solid fa-arrow-trend-up"></i> +2.1% Performance Spike</div>
+                </div>
+                <div class="glass-card p-5 rounded-xl relative overflow-hidden group">
+                    <p class="text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1">Platform Core Health</p>
+                    <h3 class="text-2xl font-bold tracking-tight">98 / 100</h3>
+                    <div class="text-[10px] font-medium text-indigo-400 flex items-center gap-1 mt-2"><i class="fa-solid fa-shield-halved"></i> Main Frame Secured</div>
+                </div>
+                <div class="glass-card p-5 rounded-xl relative overflow-hidden group">
+                    <p class="text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1">AI Automated Actions</p>
+                    <h3 class="text-2xl font-bold tracking-tight">1,420</h3>
+                    <div class="text-[10px] font-medium text-emerald-400 flex items-center gap-1 mt-2"><i class="fa-solid fa-bolt"></i> 100% Operational Efficiency</div>
+                </div>
+            </div>
+
+            <!-- DUAL VIEW INTERFACE BLOCKS -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- AUTOMATED AI CEO PROMPT INTERFACE -->
+                <div class="glass-card p-6 rounded-xl lg:col-span-2 flex flex-col justify-between border border-indigo-500/10 shadow-[0_0_30px_rgba(79,70,229,0.03)]">
+                    <div>
+                        <div class="flex items-center justify-between mb-4">
+                            <h4 class="text-sm font-bold tracking-tight flex items-center gap-2">
+                                <i class="fa-solid fa-brain text-indigo-400 animate-pulse"></i> Quantum AI CEO Diagnostic Engine
+                            </h4>
+                            <span class="text-[9px] uppercase font-bold tracking-widest text-indigo-400 bg-indigo-500/10 border border-indigo-500/20 px-2 py-0.5 rounded">Neural Link Set</span>
+                        </div>
+                        <div class="bg-slate-950/40 rounded-xl p-4 border border-slate-900 font-mono text-xs text-slate-300 leading-relaxed mb-4">
+                            <span class="text-emerald-400 font-bold">&gt; MATRIX ANALYSIS:</span> Global trends point to an immediate cash velocity surge on your target sheets. Recommendation: Scale structural automated outreach metrics immediately to accommodate enterprise-level operations capacity.
+                        </div>
+                    </div>
+                    <button class="w-full py-2.5 bg-gradient-to-r from-indigo-600 to-indigo-700 hover:from-indigo-500 hover:to-indigo-600 text-white font-semibold rounded-xl text-xs tracking-wider uppercase cursor-pointer"><i class="fa-solid fa-wand-magic-sparkles mr-1"></i> Generate Next Forecast Architecture</button>
+                </div>
+
+                <!-- LIVE LOG TRANSACTIONAL FEED -->
+                <div class="glass-card p-6 rounded-xl flex flex-col justify-between">
+                    <div>
+                        <h4 class="text-sm font-bold tracking-tight mb-4 flex items-center gap-2"><i class="fa-solid fa-list text-slate-400"></i> Operation Activity</h4>
+                        <div class="space-y-4">
+                            <div class="flex gap-3 text-xs">
+                                <div class="w-1.5 h-1.5 rounded-full bg-emerald-400 mt-1.5 shrink-0"></div>
+                                <div>
+                                    <p class="text-slate-300 font-medium">New Record Added to CRM_Leads</p>
+                                    <span class="text-[9px] text-slate-500">2 mins ago • Operational Database</span>
+                                </div>
+                            </div>
+                            <div class="flex gap-3 text-xs">
+                                <div class="w-1.5 h-1.5 rounded-full bg-indigo-400 mt-1.5 shrink-0"></div>
+                                <div>
+                                    <p class="text-slate-300 font-medium">System Automated Database Verification</p>
+                                    <span class="text-[9px] text-slate-500">1 hr ago • System Security Architecture</span>
+                                </div>
+                            </div>
+                            <div class="flex gap-3 text-xs">
+                                <div class="w-1.5 h-1.5 rounded-full bg-amber-400 mt-1.5 shrink-0"></div>
+                                <div>
+                                    <p class="text-slate-300 font-medium">Invoice Generated (#INV-049)</p>
+                                    <span class="text-[9px] text-slate-500">3 hrs ago • Billing Automation Sheet</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="index.html" class="text-[11px] font-semibold text-slate-500 hover:text-rose-400 transition-colors text-center block pt-3 mt-4 border-t border-slate-800/60"><i class="fa-solid fa-power-off mr-1"></i> Terminate Active Session</a>
+                </div>
+            </div>
+        </main>
+    </div>
 </body>
 </html>
-
