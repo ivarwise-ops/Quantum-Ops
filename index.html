@@ -1,86 +1,75 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Quantum Ops Elite</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-  <style>
-    body { background: linear-gradient(135deg, #0f172a, #1e2937); }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuantumOps — Portal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { background-color: #0B0F19; font-family: system-ui, sans-serif; }
+        .glass-panel {
+            background: rgba(19, 27, 46, 0.6);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+    </style>
 </head>
-<body class="min-h-screen flex items-center justify-center text-white">
-  <div class="max-w-md w-full p-8">
-    <div class="text-center mb-10">
-      <h1 class="text-4xl font-bold mb-2">QUANTUM OPS</h1>
-      <p class="text-purple-400">Elite Command Center</p>
+<body class="text-slate-100 min-h-screen flex items-center justify-center relative overflow-hidden">
+
+    <!-- Glowing Background Anchors -->
+    <div class="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-indigo-500/10 rounded-full blur-[120px] pointer-events-none"></div>
+    <div class="absolute bottom-[-10%] right-[-10%] w-[500px] h-[500px] bg-emerald-500/10 rounded-full blur-[120px] pointer-events-none"></div>
+
+    <!-- Login Card -->
+    <div class="glass-panel w-full max-w-md mx-4 p-8 rounded-2xl relative shadow-[0_0_50px_rgba(0,0,0,0.6)] transition-all duration-300">
+        <div class="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-indigo-500 to-emerald-500 rounded-t-2xl"></div>
+
+        <!-- Identity Title -->
+        <div class="text-center mb-8">
+            <div class="w-12 h-12 mx-auto rounded-xl bg-gradient-to-tr from-indigo-600 to-emerald-500 flex items-center justify-center shadow-lg shadow-indigo-500/20 mb-3">
+                <i class="fa-solid fa-terminal text-white text-lg"></i>
+            </div>
+            <h1 class="text-2xl font-bold tracking-tight">QUANTUM<span class="text-indigo-400 font-extrabold ml-0.5">OPS</span></h1>
+            <p class="text-[10px] text-slate-400 uppercase tracking-widest font-medium mt-1"><i class="fa-solid fa-sparkles text-emerald-400 mr-1"></i> Elite Suite Command</p>
+        </div>
+
+        <!-- Interactive Form -->
+        <form id="loginForm" class="space-y-5">
+            <div>
+                <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-2">Access Email Address</label>
+                <div class="relative">
+                    <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-500"><i class="fa-solid fa-envelope text-sm"></i></span>
+                    <input type="email" required placeholder="name@company.com" class="w-full pl-10 pr-4 py-3 bg-[#0B0F19]/80 border border-slate-800 rounded-xl text-sm focus:outline-none focus:border-indigo-500 transition-all text-slate-200">
+                </div>
+            </div>
+
+            <div>
+                <div class="flex items-center justify-between mb-2">
+                    <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider">Secure Access Pin</label>
+                    <a href="#" class="text-xs text-indigo-400 hover:text-indigo-300 transition-colors">Forgot key?</a>
+                </div>
+                <div class="relative">
+                    <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-500"><i class="fa-solid fa-lock text-sm"></i></span>
+                    <input type="password" required placeholder="••••••••" class="w-full pl-10 pr-4 py-3 bg-[#0B0F19]/80 border border-slate-800 rounded-xl text-sm focus:outline-none focus:border-indigo-500 transition-all text-slate-200">
+                </div>
+            </div>
+
+            <button type="submit" id="submitBtn" class="w-full py-3 bg-gradient-to-r from-indigo-600 to-indigo-700 hover:from-indigo-500 hover:to-indigo-600 text-white text-sm font-semibold rounded-xl shadow-lg transition-all duration-200 flex items-center justify-center gap-2 mt-2 cursor-pointer">
+                <span>Initialize Terminal</span> <i class="fa-solid fa-arrow-right text-xs"></i>
+            </button>
+        </form>
     </div>
 
-    <!-- Login Form -->
-    <div id="loginForm" class="bg-slate-900 p-8 rounded-2xl">
-      <h2 class="text-2xl font-semibold mb-6 text-center">Welcome Back, Commander</h2>
-      <input id="loginEmail" type="email" placeholder="Gmail Address" class="w-full p-4 mb-4 bg-slate-800 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500">
-      <input id="loginPassword" type="password" placeholder="Password" class="w-full p-4 mb-6 bg-slate-800 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500">
-      <button onclick="login()" class="w-full bg-purple-600 hover:bg-purple-700 py-4 rounded-xl font-semibold">Login</button>
-      <p class="text-center mt-6 text-sm">Don't have an account? 
-        <span onclick="toggleForms()" class="text-purple-400 cursor-pointer">Sign Up</span>
-      </p>
-    </div>
-
-    <!-- Signup Form -->
-    <div id="signupForm" class="bg-slate-900 p-8 rounded-2xl hidden">
-      <h2 class="text-2xl font-semibold mb-6 text-center">Create Command Account</h2>
-      <input id="signupEmail" type="email" placeholder="Gmail Address" class="w-full p-4 mb-4 bg-slate-800 rounded-xl">
-      <input id="signupUsername" type="text" placeholder="Username" class="w-full p-4 mb-4 bg-slate-800 rounded-xl">
-      <input id="signupPhone" type="tel" placeholder="Phone Number" class="w-full p-4 mb-4 bg-slate-800 rounded-xl">
-      <input id="signupPassword" type="password" placeholder="Password" class="w-full p-4 mb-6 bg-slate-800 rounded-xl">
-      <button onclick="signup()" class="w-full bg-purple-600 hover:bg-purple-700 py-4 rounded-xl font-semibold">Create Account</button>
-      <p class="text-center mt-6 text-sm">Already have an account? 
-        <span onclick="toggleForms()" class="text-purple-400 cursor-pointer">Login</span>
-      </p>
-    </div>
-  </div>
-
-  <script>
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx8oY8vqiM3bCZbVjv4dPPyuSkYq_CdU4qIhlWpWNt26Aq0AEmVM781i2BYKJjuqN6W2g/exec";
-
-    function toggleForms() {
-      document.getElementById('loginForm').classList.toggle('hidden');
-      document.getElementById('signupForm').classList.toggle('hidden');
-    }
-
-    async function signup() {
-      const data = {
-        action: "signup",
-        email: document.getElementById('signupEmail').value,
-        username: document.getElementById('signupUsername').value,
-        phone: document.getElementById('signupPhone').value,
-        password: document.getElementById('signupPassword').value
-      };
-
-      const res = await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify(data) });
-      const result = await res.json();
-      alert(result.success ? "Account created! Now login." : result.error);
-    }
-
-    async function login() {
-      const data = {
-        action: "login",
-        email: document.getElementById('loginEmail').value,
-        password: document.getElementById('loginPassword').value
-      };
-
-      const res = await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify(data) });
-      const result = await res.json();
-
-      if (result.success) {
-        localStorage.setItem('userEmail', data.email);
-        window.location.href = "dashboard.html";
-      } else {
-        alert(result.error);
-      }
-    }
-  </script>
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const btn = document.getElementById('submitBtn');
+            btn.innerHTML = `<i class="fa-solid fa-circle-notch animate-spin mr-2"></i> Optimizing Matrix...`;
+            btn.style.opacity = '0.7';
+            setTimeout(() => { window.location.href = 'dashboard.html'; }, 1000);
+        });
+    </script>
 </body>
 </html>
