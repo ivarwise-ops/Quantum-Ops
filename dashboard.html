@@ -3,159 +3,356 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>QuantumOps — Core Command</title>
+    <title>Quantum Ops Elite — Command Center</title>
+    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Chart.js for beautiful analytics -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        body { background-color: #0B0F19; font-family: system-ui, sans-serif; }
-        .glass-card {
-            background: rgba(19, 27, 46, 0.55);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.06);
-        }
+        body { background-color: #060913; font-family: system-ui, -apple-system, sans-serif; }
+        .bg-card { background-color: #0d1222; border: 1px solid rgba(255, 255, 255, 0.04); }
+        .bg-sidebar { background-color: #090d1a; }
+        /* Hide scrollbars but keep functionality */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #060913; }
+        ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 3px; }
     </style>
 </head>
-<body class="text-slate-100 min-h-screen relative overflow-x-hidden">
+<body class="text-slate-200 min-h-screen flex overflow-hidden">
 
-    <!-- Ambient Visual Glow Vectors -->
-    <div class="absolute top-[-10%] left-[-10%] w-[600px] h-[600px] bg-indigo-500/5 rounded-full blur-[140px] pointer-events-none"></div>
-    <div class="absolute bottom-[-10%] right-[-10%] w-[600px] h-[600px] bg-emerald-500/5 rounded-full blur-[140px] pointer-events-none"></div>
-
-    <div class="flex min-h-screen">
-        <!-- SIDEBAR NAVIGATION PANEL -->
-        <aside class="w-64 glass-card border-r border-slate-800/60 p-6 flex flex-col justify-between hidden lg:flex shrink-0">
-            <div>
-                <!-- Brand Title Identification -->
-                <div class="flex items-center gap-3 mb-10">
-                    <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 to-emerald-500 flex items-center justify-center shadow-md">
-                        <i class="fa-solid fa-terminal text-white text-md"></i>
+    <!-- SIDEBAR -->
+    <aside class="w-64 bg-sidebar border-r border-slate-900 flex flex-col justify-between p-4 shrink-0 overflow-y-auto hidden lg:flex">
+        <div>
+            <!-- Logo Header -->
+            <div class="p-2 mb-6">
+                <div class="flex items-center gap-2">
+                    <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-indigo-600 to-purple-500 flex items-center justify-center shadow-lg shadow-indigo-500/20">
+                        <i class="fa-solid fa-circle-nodes text-white text-sm"></i>
                     </div>
                     <div>
-                        <h1 class="text-md font-bold tracking-tight">QUANTUM<span class="text-indigo-400 font-extrabold ml-0.5">OPS</span></h1>
-                        <p class="text-[9px] text-emerald-400 font-bold tracking-widest uppercase"><i class="fa-solid fa-sparkles text-[7px] mr-0.5"></i> Elite Suite</p>
+                        <h1 class="text-md font-bold tracking-wider text-white">QUANTUM OPS</h1>
+                        <p class="text-[9px] text-indigo-400 font-extrabold tracking-widest uppercase">ELITE</p>
                     </div>
                 </div>
-
-                <!-- Main Module List Selection -->
-                <nav class="space-y-1">
-                    <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-xl bg-indigo-600/10 text-indigo-400 border border-indigo-500/20 font-medium text-xs transition-all">
-                        <i class="fa-solid fa-chart-pie w-4 text-center"></i> Core Dashboard
-                    </a>
-                    <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:bg-slate-800/30 hover:text-slate-200 text-xs transition-all">
-                        <i class="fa-solid fa-users w-4 text-center"></i> CRM / Leads Matrix
-                    </a>
-                    <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:bg-slate-800/30 hover:text-slate-200 text-xs transition-all">
-                        <i class="fa-solid fa-file-invoice-dollar w-4 text-center"></i> Financial Invoices
-                    </a>
-                    <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:bg-slate-800/30 hover:text-slate-200 text-xs transition-all">
-                        <i class="fa-solid fa-cubes w-4 text-center"></i> Stock Inventory
-                    </a>
-                    <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:bg-slate-800/30 hover:text-slate-200 text-xs transition-all">
-                        <i class="fa-solid fa-user-tie w-4 text-center"></i> Human Resources
-                    </a>
-                </nav>
+                <p class="text-[10px] text-slate-500 mt-2 font-medium">Your Business. One Command Center.</p>
             </div>
 
-            <!-- Profile Matrix Frame Footer -->
-            <div class="flex items-center gap-3 pt-4 border-t border-slate-800/60">
-                <div class="w-9 h-9 rounded-full bg-slate-800 flex items-center justify-center text-slate-200 font-bold border border-slate-700 text-xs">IW</div>
+            <!-- Navigation Links -->
+            <nav class="space-y-1">
+                <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-xl bg-indigo-600/20 text-indigo-400 border border-indigo-500/20 text-xs font-semibold">
+                    <i class="fa-solid fa-gauge-high w-4 text-center"></i> Command Center
+                </a>
+                <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-400 hover:bg-slate-800/40 hover:text-slate-200 text-xs font-medium transition-all">
+                    <i class="fa-solid fa-brain w-4 text-center text-purple-400"></i> AI CEO <span class="ml-auto text-[9px] bg-emerald-500/20 text-emerald-400 px-1.5 py-0.5 rounded font-bold">NEW</span>
+                </a>
+                <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-400 hover:bg-slate-800/40 hover:text-slate-200 text-xs font-medium transition-all">
+                    <i class="fa-solid fa-address-book w-4 text-center"></i> CRM
+                </a>
+                <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-400 hover:bg-slate-800/40 hover:text-slate-200 text-xs font-medium transition-all">
+                    <i class="fa-solid fa-id-card w-4 text-center"></i> HR
+                </a>
+                <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-400 hover:bg-slate-800/40 hover:text-slate-200 text-xs font-medium transition-all">
+                    <i class="fa-solid fa-boxes-stacked w-4 text-center"></i> Inventory
+                </a>
+                <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-400 hover:bg-slate-800/40 hover:text-slate-200 text-xs font-medium transition-all">
+                    <i class="fa-solid fa-calculator w-4 text-center"></i> Accounting
+                </a>
+                <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-400 hover:bg-slate-800/40 hover:text-slate-200 text-xs font-medium transition-all">
+                    <i class="fa-solid fa-chart-line w-4 text-center"></i> Sales
+                </a>
+                <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-400 hover:bg-slate-800/40 hover:text-slate-200 text-xs font-medium transition-all">
+                    <i class="fa-solid fa-folder w-4 text-center"></i> Documents
+                </a>
+                <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-400 hover:bg-slate-800/40 hover:text-slate-200 text-xs font-medium transition-all">
+                    <i class="fa-solid fa-users w-4 text-center"></i> Staff
+                </a>
+                <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-400 hover:bg-slate-800/40 hover:text-slate-200 text-xs font-medium transition-all">
+                    <i class="fa-solid fa-chart-bar w-4 text-center"></i> Analytics
+                </a>
+                <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-400 hover:bg-slate-800/40 hover:text-slate-200 text-xs font-medium transition-all">
+                    <i class="fa-solid fa-calendar w-4 text-center"></i> Calendar
+                </a>
+                <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-400 hover:bg-slate-800/40 hover:text-slate-200 text-xs font-medium transition-all">
+                    <i class="fa-solid fa-check-to-slot w-4 text-center"></i> Tasks
+                </a>
+                <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-400 hover:bg-slate-800/40 hover:text-slate-200 text-xs font-medium transition-all">
+                    <i class="fa-solid fa-bell w-4 text-center"></i> Notifications
+                </a>
+            </nav>
+        </div>
+
+        <!-- Upgrade Banner -->
+        <div class="mt-8">
+            <div class="p-4 rounded-xl bg-gradient-to-b from-indigo-950/40 to-indigo-900/20 border border-indigo-500/20 relative overflow-hidden text-center">
+                <i class="fa-solid fa-crown text-amber-400 mb-2 text-md"></i>
+                <h4 class="text-xs font-bold text-white">Upgrade to Elite</h4>
+                <p class="text-[10px] text-slate-400 mt-1 mb-3">Unlock all modules, AI tools and advanced features.</p>
+                <button class="w-full py-2 bg-indigo-600 hover:bg-indigo-500 text-white text-[11px] font-bold rounded-lg transition-all">Upgrade Now &rarr;</button>
+            </div>
+            <p class="text-[10px] text-slate-600 text-center mt-4">&copy; 2026 Quantum OPS Elite</p>
+        </div>
+    </aside>
+
+    <!-- MAIN APP WRAPPER -->
+    <div class="flex-1 flex flex-col overflow-hidden">
+        
+        <!-- HEADER TOP BAR -->
+        <header class="h-16 border-b border-slate-900 px-6 flex items-center justify-between shrink-0">
+            <div class="flex items-center gap-4">
+                <i class="fa-solid fa-bars text-slate-400 cursor-pointer text-sm lg:hidden"></i>
                 <div>
-                    <h4 class="text-xs font-semibold text-slate-200">Ivar Wise</h4>
-                    <p class="text-[10px] text-slate-500">System Architect</p>
+                    <h2 class="text-sm font-semibold text-white">Welcome back, Commander 👋</h2>
+                    <p class="text-[11px] text-slate-400">Here's what's happening in your empire today.</p>
                 </div>
             </div>
-        </aside>
-
-        <!-- DASHBOARD CONTAINER INTERFACE -->
-        <main class="flex-1 p-6 lg:p-10 max-w-7xl mx-auto space-y-8 w-full overflow-y-auto">
-            <!-- Header Identity Matrix -->
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                <div>
-                    <h2 class="text-xl lg:text-2xl font-bold tracking-tight">System Operational Hub</h2>
-                    <p class="text-xs lg:text-sm text-slate-400">Real-time terminal environment configuration diagnostics.</p>
+            
+            <div class="flex items-center gap-4">
+                <!-- Search -->
+                <div class="relative hidden sm:block">
+                    <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-500"><i class="fa-solid fa-magnifying-glass text-xs"></i></span>
+                    <input type="text" placeholder="Search anything..." class="w-60 bg-[#0d1222] border border-slate-800 rounded-xl pl-9 pr-4 py-1.5 text-xs focus:outline-none focus:border-slate-700 text-slate-200">
                 </div>
-                <div class="flex items-center">
-                    <div class="glass-card px-3 py-2 rounded-xl flex items-center gap-2 text-[11px] font-bold text-emerald-400 bg-emerald-500/5">
-                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span> NETWORK ENGINE ACTIVE
+                <!-- Global Action Button -->
+                <button class="w-8 h-8 rounded-xl bg-indigo-600 text-white flex items-center justify-center shadow-md hover:bg-indigo-500 cursor-pointer"><i class="fa-solid fa-plus text-xs"></i></button>
+                <!-- Notification Alert Icon -->
+                <div class="relative p-2 text-slate-400 hover:text-white cursor-pointer">
+                    <i class="fa-solid fa-bell text-sm"></i>
+                    <span class="absolute top-1 right-1 w-4 h-4 bg-rose-500 text-white text-[9px] font-extrabold flex items-center justify-center rounded-full">5</span>
+                </div>
+                <!-- Chat Icon -->
+                <div class="p-2 text-slate-400 hover:text-white cursor-pointer"><i class="fa-solid fa-comment-dots text-sm"></i></div>
+                <!-- User Meta Profile -->
+                <div class="flex items-center gap-2.5 border-l border-slate-800 pl-4">
+                    <div class="w-8 h-8 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center font-bold text-xs text-indigo-300 overflow-hidden">
+                        <i class="fa-solid fa-user-tie"></i>
                     </div>
+                    <div class="hidden md:block text-left">
+                        <p class="text-xs font-bold text-white leading-tight">David John</p>
+                        <p class="text-[10px] text-slate-500">Admin</p>
+                    </div>
+                    <i class="fa-solid fa-chevron-down text-[10px] text-slate-500 hidden md:block"></i>
                 </div>
             </div>
+        </header>
 
-            <!-- PERFORMANCE KPI MATRIX ROWS -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                <div class="glass-card p-5 rounded-xl relative overflow-hidden group">
-                    <p class="text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1">Gross Revenue Matrix</p>
-                    <h3 class="text-2xl font-bold tracking-tight">$124,500</h3>
-                    <div class="text-[10px] font-medium text-emerald-400 flex items-center gap-1 mt-2"><i class="fa-solid fa-arrow-trend-up"></i> +14.2% Growth Index</div>
-                </div>
-                <div class="glass-card p-5 rounded-xl relative overflow-hidden group">
-                    <p class="text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1">Conversion Analytics</p>
-                    <h3 class="text-2xl font-bold tracking-tight">24.8%</h3>
-                    <div class="text-[10px] font-medium text-emerald-400 flex items-center gap-1 mt-2"><i class="fa-solid fa-arrow-trend-up"></i> +2.1% Performance Spike</div>
-                </div>
-                <div class="glass-card p-5 rounded-xl relative overflow-hidden group">
-                    <p class="text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1">Platform Core Health</p>
-                    <h3 class="text-2xl font-bold tracking-tight">98 / 100</h3>
-                    <div class="text-[10px] font-medium text-indigo-400 flex items-center gap-1 mt-2"><i class="fa-solid fa-shield-halved"></i> Main Frame Secured</div>
-                </div>
-                <div class="glass-card p-5 rounded-xl relative overflow-hidden group">
-                    <p class="text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1">AI Automated Actions</p>
-                    <h3 class="text-2xl font-bold tracking-tight">1,420</h3>
-                    <div class="text-[10px] font-medium text-emerald-400 flex items-center gap-1 mt-2"><i class="fa-solid fa-bolt"></i> 100% Operational Efficiency</div>
-                </div>
-            </div>
-
-            <!-- DUAL VIEW INTERFACE BLOCKS -->
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <!-- AUTOMATED AI CEO PROMPT INTERFACE -->
-                <div class="glass-card p-6 rounded-xl lg:col-span-2 flex flex-col justify-between border border-indigo-500/10 shadow-[0_0_30px_rgba(79,70,229,0.03)]">
+        <!-- DASHBOARD GRID CONTENT MODULES -->
+        <div class="flex-1 overflow-y-auto p-6 space-y-6">
+            
+            <!-- ROW 1: CORE STAT CARDS -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
+                <div class="bg-card p-4 rounded-xl flex items-center gap-4">
+                    <div class="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center text-sm"><i class="fa-solid fa-wallet"></i></div>
                     <div>
-                        <div class="flex items-center justify-between mb-4">
-                            <h4 class="text-sm font-bold tracking-tight flex items-center gap-2">
-                                <i class="fa-solid fa-brain text-indigo-400 animate-pulse"></i> Quantum AI CEO Diagnostic Engine
-                            </h4>
-                            <span class="text-[9px] uppercase font-bold tracking-widest text-indigo-400 bg-indigo-500/10 border border-indigo-500/20 px-2 py-0.5 rounded">Neural Link Set</span>
-                        </div>
-                        <div class="bg-slate-950/40 rounded-xl p-4 border border-slate-900 font-mono text-xs text-slate-300 leading-relaxed mb-4">
-                            <span class="text-emerald-400 font-bold">&gt; MATRIX ANALYSIS:</span> Global trends point to an immediate cash velocity surge on your target sheets. Recommendation: Scale structural automated outreach metrics immediately to accommodate enterprise-level operations capacity.
-                        </div>
+                        <p class="text-[10px] uppercase font-bold tracking-wider text-slate-400">Total Revenue</p>
+                        <h3 class="text-lg font-bold text-white mt-0.5">$125,750.00</h3>
+                        <span class="text-[10px] font-semibold text-emerald-400"><i class="fa-solid fa-arrow-up text-[9px]"></i> 18.6% <span class="text-slate-500">vs last month</span></span>
                     </div>
-                    <button class="w-full py-2.5 bg-gradient-to-r from-indigo-600 to-indigo-700 hover:from-indigo-500 hover:to-indigo-600 text-white font-semibold rounded-xl text-xs tracking-wider uppercase cursor-pointer"><i class="fa-solid fa-wand-magic-sparkles mr-1"></i> Generate Next Forecast Architecture</button>
                 </div>
-
-                <!-- LIVE LOG TRANSACTIONAL FEED -->
-                <div class="glass-card p-6 rounded-xl flex flex-col justify-between">
+                <div class="bg-card p-4 rounded-xl flex items-center gap-4">
+                    <div class="w-10 h-10 rounded-xl bg-indigo-500/10 text-indigo-400 flex items-center justify-center text-sm"><i class="fa-solid fa-chart-pie"></i></div>
                     <div>
-                        <h4 class="text-sm font-bold tracking-tight mb-4 flex items-center gap-2"><i class="fa-solid fa-list text-slate-400"></i> Operation Activity</h4>
-                        <div class="space-y-4">
-                            <div class="flex gap-3 text-xs">
-                                <div class="w-1.5 h-1.5 rounded-full bg-emerald-400 mt-1.5 shrink-0"></div>
-                                <div>
-                                    <p class="text-slate-300 font-medium">New Record Added to CRM_Leads</p>
-                                    <span class="text-[9px] text-slate-500">2 mins ago • Operational Database</span>
-                                </div>
-                            </div>
-                            <div class="flex gap-3 text-xs">
-                                <div class="w-1.5 h-1.5 rounded-full bg-indigo-400 mt-1.5 shrink-0"></div>
-                                <div>
-                                    <p class="text-slate-300 font-medium">System Automated Database Verification</p>
-                                    <span class="text-[9px] text-slate-500">1 hr ago • System Security Architecture</span>
-                                </div>
-                            </div>
-                            <div class="flex gap-3 text-xs">
-                                <div class="w-1.5 h-1.5 rounded-full bg-amber-400 mt-1.5 shrink-0"></div>
-                                <div>
-                                    <p class="text-slate-300 font-medium">Invoice Generated (#INV-049)</p>
-                                    <span class="text-[9px] text-slate-500">3 hrs ago • Billing Automation Sheet</span>
-                                </div>
-                            </div>
-                        </div>
+                        <p class="text-[10px] uppercase font-bold tracking-wider text-slate-400">Total Profit</p>
+                        <h3 class="text-lg font-bold text-white mt-0.5">$32,850.00</h3>
+                        <span class="text-[10px] font-semibold text-emerald-400"><i class="fa-solid fa-arrow-up text-[9px]"></i> 21.4% <span class="text-slate-500">vs last month</span></span>
                     </div>
-                    <a href="index.html" class="text-[11px] font-semibold text-slate-500 hover:text-rose-400 transition-colors text-center block pt-3 mt-4 border-t border-slate-800/60"><i class="fa-solid fa-power-off mr-1"></i> Terminate Active Session</a>
+                </div>
+                <div class="bg-card p-4 rounded-xl flex items-center gap-4">
+                    <div class="w-10 h-10 rounded-xl bg-purple-500/10 text-purple-400 flex items-center justify-center text-sm"><i class="fa-solid fa-bag-shopping"></i></div>
+                    <div>
+                        <p class="text-[10px] uppercase font-bold tracking-wider text-slate-400">Total Sales</p>
+                        <h3 class="text-lg font-bold text-white mt-0.5">$98,500.00</h3>
+                        <span class="text-[10px] font-semibold text-emerald-400"><i class="fa-solid fa-arrow-up text-[9px]"></i> 16.2% <span class="text-slate-500">vs last month</span></span>
+                    </div>
+                </div>
+                <div class="bg-card p-4 rounded-xl flex items-center gap-4">
+                    <div class="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-400 flex items-center justify-center text-sm"><i class="fa-solid fa-file-invoice"></i></div>
+                    <div>
+                        <p class="text-[10px] uppercase font-bold tracking-wider text-slate-400">Outstanding Invoices</p>
+                        <h3 class="text-lg font-bold text-white mt-0.5">$24,650.00</h3>
+                        <span class="text-[10px] font-semibold text-rose-400"><i class="fa-solid fa-arrow-down text-[9px]"></i> 8.5% <span class="text-slate-500">vs last month</span></span>
+                    </div>
                 </div>
             </div>
-        </main>
+
+            <!-- ROW 2: DATA CHARTS & ARTIFICIAL ASSISTANT PANEL -->
+            <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
+                <!-- Linear Analytics Plotting -->
+                <div class="bg-card p-5 rounded-2xl xl:col-span-2 space-y-4">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h4 class="text-sm font-bold text-white">Business Overview</h4>
+                            <p class="text-[11px] text-slate-400">Your business performance at a glance</p>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <select class="bg-[#060913] border border-slate-800 rounded-lg text-[11px] px-2.5 py-1 text-slate-400 focus:outline-none"><option>This Year</option></select>
+                            <button class="px-2.5 py-1 bg-slate-800 text-slate-300 rounded-lg text-[11px] font-medium border border-slate-700"><i class="fa-solid fa-download text-[10px] mr-1"></i> Export</button>
+                        </div>
+                    </div>
+                    <div class="h-64 w-full relative">
+                        <canvas id="businessPerformanceChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Donut Modular Metrics Plotting -->
+                <div class="bg-card p-5 rounded-2xl flex flex-col justify-between">
+                    <div>
+                        <h4 class="text-sm font-bold text-white mb-1">Revenue by Module</h4>
+                        <p class="text-[11px] text-slate-400 mb-4">Functional breakdown analysis</p>
+                    </div>
+                    <div class="flex items-center justify-center gap-6">
+                        <div class="w-28 h-28 relative flex items-center justify-center">
+                            <canvas id="revenueByModuleChart"></canvas>
+                        </div>
+                        <!-- Custom Legend Aligning with Design Grid -->
+                        <div class="space-y-1.5 flex-1">
+                            <div class="flex items-center justify-between text-[11px]"><span class="flex items-center gap-2 text-slate-400"><span class="w-2 h-2 rounded-full bg-indigo-500"></span> Sales</span> <span class="font-semibold text-white">40% ($50,300)</span></div>
+                            <div class="flex items-center justify-between text-[11px]"><span class="flex items-center gap-2 text-slate-400"><span class="w-2 h-2 rounded-full bg-emerald-400"></span> Services</span> <span class="font-semibold text-white">25% ($31,400)</span></div>
+                            <div class="flex items-center justify-between text-[11px]"><span class="flex items-center gap-2 text-slate-400"><span class="w-2 h-2 rounded-full bg-amber-400"></span> Products</span> <span class="font-semibold text-white">20% ($25,150)</span></div>
+                            <div class="flex items-center justify-between text-[11px]"><span class="flex items-center gap-2 text-slate-400"><span class="w-2 h-2 rounded-full bg-purple-500"></span> Projects</span> <span class="font-semibold text-white">15% ($18,900)</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ROW 3: DETAILED GRID LAYOUT & QUICK ACTION CONTROLS -->
+            <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
+                
+                <!-- Module Management Grid -->
+                <div class="xl:col-span-2 space-y-4">
+                    <div>
+                        <h4 class="text-sm font-bold text-white">Module Overview</h4>
+                        <p class="text-[11px] text-slate-400">All systems operational</p>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <!-- CRM Module Card -->
+                        <div class="bg-[#0d1222] border border-slate-900/60 p-4 rounded-xl flex items-center justify-between">
+                            <div class="flex items-center gap-3">
+                                <div class="w-9 h-9 rounded-xl bg-purple-500/10 text-purple-400 flex items-center justify-center text-xs"><i class="fa-solid fa-address-book"></i></div>
+                                <div>
+                                    <h5 class="text-xs font-bold text-white">CRM</h5>
+                                    <p class="text-[10px] text-slate-400">Manage customers & leads</p>
+                                    <p class="text-[11px] font-semibold text-slate-300 mt-1">235 <span class="text-slate-500 text-[10px]">Customers</span></p>
+                                </div>
+                            </div>
+                            <span class="text-[9px] bg-emerald-500/10 text-emerald-400 px-2 py-0.5 rounded-full font-bold">Active</span>
+                        </div>
+                        <!-- HR Module Card -->
+                        <div class="bg-[#0d1222] border border-slate-900/60 p-4 rounded-xl flex items-center justify-between">
+                            <div class="flex items-center gap-3">
+                                <div class="w-9 h-9 rounded-xl bg-amber-500/10 text-amber-400 flex items-center justify-center text-xs"><i class="fa-solid fa-id-card"></i></div>
+                                <div>
+                                    <h5 class="text-xs font-bold text-white">HR</h5>
+                                    <p class="text-[10px] text-slate-400">Manage employees & payroll</p>
+                                    <p class="text-[11px] font-semibold text-slate-300 mt-1">48 <span class="text-slate-500 text-[10px]">Employees</span></p>
+                                </div>
+                            </div>
+                            <span class="text-[9px] bg-emerald-500/10 text-emerald-400 px-2 py-0.5 rounded-full font-bold">Active</span>
+                        </div>
+                        <!-- Inventory Module Card -->
+                        <div class="bg-[#0d1222] border border-slate-900/60 p-4 rounded-xl flex items-center justify-between">
+                            <div class="flex items-center gap-3">
+                                <div class="w-9 h-9 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center text-xs"><i class="fa-solid fa-boxes-stacked"></i></div>
+                                <div>
+                                    <h5 class="text-xs font-bold text-white">Inventory</h5>
+                                    <p class="text-[10px] text-slate-400">Track stock & items</p>
+                                    <p class="text-[11px] font-semibold text-slate-300 mt-1">1,248 <span class="text-slate-500 text-[10px]">Items</span></p>
+                                </div>
+                            </div>
+                            <span class="text-[9px] bg-emerald-500/10 text-emerald-400 px-2 py-0.5 rounded-full font-bold">Active</span>
+                        </div>
+                        <!-- Accounting Module Card -->
+                        <div class="bg-[#0d1222] border border-slate-900/60 p-4 rounded-xl flex items-center justify-between">
+                            <div class="flex items-center gap-3">
+                                <div class="w-9 h-9 rounded-xl bg-indigo-500/10 text-indigo-400 flex items-center justify-center text-xs"><i class="fa-solid fa-calculator"></i></div>
+                                <div>
+                                    <h5 class="text-xs font-bold text-white">Accounting</h5>
+                                    <p class="text-[10px] text-slate-400">Manage finances</p>
+                                    <p class="text-[11px] font-semibold text-slate-300 mt-1">87 <span class="text-slate-500 text-[10px]">Transactions</span></p>
+                                </div>
+                            </div>
+                            <span class="text-[9px] bg-emerald-500/10 text-emerald-400 px-2 py-0.5 rounded-full font-bold">Active</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Sidebar Quick Controls Panel -->
+                <div class="space-y-4">
+                    <div class="flex items-center justify-between">
+                        <h4 class="text-sm font-bold text-white">Quick Actions</h4>
+                        <button class="text-[10px] text-slate-500 hover:text-white transition-all">Customize</button>
+                    </div>
+                    <div class="bg-card p-4 rounded-xl">
+                        <div class="grid grid-cols-4 gap-2 text-center">
+                            <button class="p-2.5 rounded-xl hover:bg-slate-800/40 text-slate-400 hover:text-white transition-all flex flex-col items-center gap-1.5 cursor-pointer">
+                                <div class="w-8 h-8 rounded-lg bg-indigo-500/10 text-indigo-400 flex items-center justify-center text-xs"><i class="fa-solid fa-user-plus"></i></div>
+                                <span class="text-[9px] font-medium block truncate max-w-full">Add Customer</span>
+                            </button>
+                            <button class="p-2.5 rounded-xl hover:bg-slate-800/40 text-slate-400 hover:text-white transition-all flex flex-col items-center gap-1.5 cursor-pointer">
+                                <div class="w-8 h-8 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center text-xs"><i class="fa-solid fa-file-invoice"></i></div>
+                                <span class="text-[9px] font-medium block truncate max-w-full">Invoice</span>
+                            </button>
+                            <button class="p-2.5 rounded-xl hover:bg-slate-800/40 text-slate-400 hover:text-white transition-all flex flex-col items-center gap-1.5 cursor-pointer">
+                                <div class="w-8 h-8 rounded-lg bg-rose-500/10 text-rose-400 flex items-center justify-center text-xs"><i class="fa-solid fa-box"></i></div>
+                                <span class="text-[9px] font-medium block truncate max-w-full">Product</span>
+                            </button>
+                            <button class="p-2.5 rounded-xl hover:bg-slate-800/40 text-slate-400 hover:text-white transition-all flex flex-col items-center gap-1.5 cursor-pointer">
+                                <div class="w-8 h-8 rounded-lg bg-amber-500/10 text-amber-400 flex items-center justify-center text-xs"><i class="fa-solid fa-user-tie"></i></div>
+                                <span class="text-[9px] font-medium block truncate max-w-full">Employee</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
     </div>
+
+    <!-- INITIALIZE CHART DATA PLOTTING SCHEMAS -->
+    <script>
+        // Line Plot Logic configuration 
+        const lineCtx = document.getElementById('businessPerformanceChart').getContext('2d');
+        new Chart(lineCtx, {
+            type: 'line',
+            data: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
+                datasets: [
+                    { label: 'Revenue', data: [42000, 39000, 52000, 68000, 58000, 74000, 82000], borderColor: '#6366f1', tension: 0.4, borderWidth: 2, pointRadius: 2, fill: false },
+                    { label: 'Profit', data: [21000, 24000, 28000, 34000, 42000, 31000, 48000], borderColor: '#10b981', tension: 0.4, borderWidth: 2, pointRadius: 2, fill: false },
+                    { label: 'Expenses', data: [11000, 18000, 14000, 12000, 24000, 19000, 22000], borderColor: '#f59e0b', tension: 0.4, borderWidth: 2, pointRadius: 2, fill: false }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: {
+                    x: { grid: { display: false }, ticks: { color: '#64748b', font: { size: 9 } } },
+                    y: { grid: { color: 'rgba(255,255,255,0.03)' }, ticks: { color: '#64748b', font: { size: 9 }, callback: v => '$' + v/1000 + 'K' } }
+                }
+            }
+        });
+
+        // Donut Chart logic configuration
+        const donutCtx = document.getElementById('revenueByModuleChart').getContext('2d');
+        new Chart(donutCtx, {
+            type: 'doughnut',
+            data: {
+                datasets: [{
+                    data: [40, 25, 20, 15],
+                    backgroundColor: ['#6366f1', '#10b981', '#f59e0b', '#a855f7'],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                cutout: '75%',
+                plugins: { legend: { display: false } }
+            }
+        });
+    </script>
 </body>
 </html>
