@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRM | Quantum Ops Elite</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-950 text-white p-8">
+    <h1 class="text-3xl font-bold mb-8">CRM - Customers & Leads</h1>
+    
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <!-- Customers -->
+        <div class="bg-slate-900 border border-slate-700 rounded-3xl p-6">
+            <h3 class="font-semibold mb-4">Customers</h3>
+            <button onclick="loadCustomers()" class="mb-4 px-4 py-2 bg-purple-600 rounded-2xl">Load Customers</button>
+            <div id="customersList" class="text-sm space-y-2"></div>
+        </div>
+        
+        <!-- Add Customer -->
+        <div class="bg-slate-900 border border-slate-700 rounded-3xl p-6">
+            <h3 class="font-semibold mb-4">Add New Customer</h3>
+            <form id="addCustomerForm">
+                <input type="text" id="customerName" placeholder="Name" class="w-full mb-3 bg-slate-800 border border-slate-600 rounded-2xl px-4 py-2">
+                <input type="email" id="customerEmail" placeholder="Email" class="w-full mb-3 bg-slate-800 border border-slate-600 rounded-2xl px-4 py-2">
+                <button type="submit" class="w-full py-2.5 bg-emerald-600 rounded-2xl">Add Customer</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = "https://script.google.com/macros/s/AKfycbzer7oCcXJVNUroa_TYHEnJx4KxTFnX4mGmrpf7y-WVH8DbQ-b1QyGkDIs_wTaQtxCs/exec";
+        
+        async function loadCustomers() {
+            const res = await fetch(API_URL, {
+                method: "POST",
+                body: JSON.stringify({ action: "getCustomers" })
+            });
+            const data = await res.json();
+            const container = document.getElementById('customersList');
+            container.innerHTML = '';
+            
+            if (data.success && data.data.customers) {
+                data.data.customers.forEach(c => {
+                    container.innerHTML += `<div class="bg-slate-800 p-3 rounded-2xl">${c.name} - ${c.email}</div>`;
+                });
+            }
+        }
+        
+        document.getElementById('addCustomerForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const name = document.getElementById('customerName').value;
+            const email = document.getElementById('customerEmail').value;
+            
+            await fetch(API_URL, {
+                method: "POST",
+                body: JSON.stringify({ action: "addCustomer", name, email })
+            });
+            alert("Customer added!");
+            loadCustomers();
+        });
+    </script>
+</body>
+</html>
