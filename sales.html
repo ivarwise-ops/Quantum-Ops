@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sales | Quantum Ops Elite</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-950 text-white p-8">
+    <h1 class="text-3xl font-bold mb-8">Sales & Invoices</h1>
+    
+    <div class="bg-slate-900 border border-slate-700 rounded-3xl p-6">
+        <button onclick="loadSales()" class="px-4 py-2 bg-purple-600 rounded-2xl mb-4">Load Sales</button>
+        <div id="salesList"></div>
+    </div>
+
+    <script>
+        const API_URL = "https://script.google.com/macros/s/AKfycbzer7oCcXJVNUroa_TYHEnJx4KxTFnX4mGmrpf7y-WVH8DbQ-b1QyGkDIs_wTaQtxCs/exec";
+        
+        async function loadSales() {
+            const res = await fetch(API_URL, {
+                method: "POST",
+                body: JSON.stringify({ action: "getSales" })
+            });
+            const data = await res.json();
+            const container = document.getElementById('salesList');
+            container.innerHTML = JSON.stringify(data, null, 2);
+        }
+    </script>
+</body>
+</html>
