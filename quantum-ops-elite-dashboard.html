@@ -858,7 +858,7 @@
     </div>
 
     <!-- ==========================================
-         JAVASCRIPT FOR REAL-TIME ANIMATIONS & CHARTS
+         JAVASCRIPT FOR REAL-TIME ANIMATIONS & CHARTS + AI CEO
     =========================================== -->
     <script>
         // 1. LIVE DIGITAL LED CLOCK SCRIPT
@@ -870,7 +870,7 @@
             const ampm = hours >= 12 ? 'PM' : 'AM';
             
             hours = hours % 12;
-            hours = hours ? hours : 12; // 12-hour format
+            hours = hours ? hours : 12;
             hours = hours < 10 ? '0' + hours : hours;
             minutes = minutes < 10 ? '0' + minutes : minutes;
             seconds = seconds < 10 ? '0' + seconds : seconds;
@@ -889,7 +889,7 @@
         setInterval(updateClock, 1000);
         updateClock();
 
-        // 2. SPARKLINES HELPER FACTORY
+        // SPARKLINES + CHARTS (kept exactly as before)
         function createSparkline(id, color, data) {
             const ctx = document.getElementById(id).getContext('2d');
             new Chart(ctx, {
@@ -920,38 +920,15 @@
         createSparkline('sparkline4', '#ff2a4b', [15, 25, 20, 35, 30, 45, 40, 50]);
         createSparkline('sparkline5', '#d946ef', [20, 25, 22, 30, 28, 35, 40, 48]);
 
-        // 3. MAIN BUSINESS OVERVIEW MULTI-LINE CHART
         const overviewCtx = document.getElementById('overviewChart').getContext('2d');
         new Chart(overviewCtx, {
             type: 'line',
             data: {
                 labels: ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'],
                 datasets: [
-                    {
-                        label: 'REVENUE',
-                        data: [20, 30, 45, 35, 60, 75, 70, 85, 80, 95, 90, 100],
-                        borderColor: '#00f0ff',
-                        backgroundColor: 'rgba(0,240,255,0.05)',
-                        borderWidth: 2,
-                        tension: 0.3,
-                        pointBackgroundColor: '#00f0ff'
-                    },
-                    {
-                        label: 'PROFIT',
-                        data: [10, 15, 25, 20, 35, 45, 40, 50, 48, 60, 58, 65],
-                        borderColor: '#00ff66',
-                        borderWidth: 2,
-                        tension: 0.3,
-                        pointBackgroundColor: '#00ff66'
-                    },
-                    {
-                        label: 'EXPENSES',
-                        data: [8, 12, 15, 18, 22, 25, 28, 30, 29, 32, 31, 33],
-                        borderColor: '#ff2a4b',
-                        borderWidth: 2,
-                        tension: 0.3,
-                        pointBackgroundColor: '#ff2a4b'
-                    }
+                    { label: 'REVENUE', data: [20, 30, 45, 35, 60, 75, 70, 85, 80, 95, 90, 100], borderColor: '#00f0ff', backgroundColor: 'rgba(0,240,255,0.05)', borderWidth: 2, tension: 0.3, pointBackgroundColor: '#00f0ff' },
+                    { label: 'PROFIT', data: [10, 15, 25, 20, 35, 45, 40, 50, 48, 60, 58, 65], borderColor: '#00ff66', borderWidth: 2, tension: 0.3, pointBackgroundColor: '#00ff66' },
+                    { label: 'EXPENSES', data: [8, 12, 15, 18, 22, 25, 28, 30, 29, 32, 31, 33], borderColor: '#ff2a4b', borderWidth: 2, tension: 0.3, pointBackgroundColor: '#ff2a4b' }
                 ]
             },
             options: {
@@ -965,7 +942,6 @@
             }
         });
 
-        // 4. REVENUE BY MODULE DONUT CHART
         const moduleCtx = document.getElementById('moduleChart').getContext('2d');
         new Chart(moduleCtx, {
             type: 'doughnut',
@@ -985,7 +961,6 @@
             }
         });
 
-        // 5. CASH FLOW BAR CHART
         const cashCtx = document.getElementById('cashFlowChart').getContext('2d');
         new Chart(cashCtx, {
             type: 'bar',
@@ -1005,7 +980,6 @@
             }
         });
 
-        // 6. AI PREDICTION CHART
         const predictCtx = document.getElementById('aiPredictChart').getContext('2d');
         new Chart(predictCtx, {
             type: 'line',
@@ -1028,10 +1002,10 @@
             }
         });
 
-        // 7. API URL
+        // API URL
         const API_URL = "https://script.google.com/macros/s/AKfycbzy5OVPf1zk4Quy_RvrictzgLVWFZ77E4VL1PnR7gcPexkffVCNoxsun0zceBMRBAxm/exec";
 
-        // ===================== AI CEO CHAT + VOICE =====================
+        // AI CEO CHAT + VOICE
         const modal = document.getElementById('aiChatModal');
         const messagesDiv = document.getElementById('aiMessages');
         const input = document.getElementById('aiInput');
@@ -1039,11 +1013,9 @@
         const micBtn = document.getElementById('aiMicBtn');
         const openBtn = document.getElementById('openAiChatBtn');
         const closeBtn = document.getElementById('closeAiChat');
-        const voiceBtn = document.getElementById('voiceBtn');
 
         openBtn.addEventListener('click', () => modal.classList.add('active'));
         closeBtn.addEventListener('click', () => modal.classList.remove('active'));
-        voiceBtn.addEventListener('click', () => modal.classList.add('active'));
 
         function addMessage(text, isUser = false) {
             const div = document.createElement('div');
@@ -1068,15 +1040,12 @@
                 const data = await res.json();
                 const reply = data.data?.response || data.message || 'I am ready to help with your business data.';
                 
-                // Remove "Analyzing..." message
                 messagesDiv.lastChild.remove();
                 addMessage(reply, false);
 
-                // Voice output
                 if ('speechSynthesis' in window) {
                     const utter = new SpeechSynthesisUtterance(reply);
                     utter.rate = 0.95;
-                    utter.pitch = 1;
                     speechSynthesis.speak(utter);
                 }
             } catch (err) {
@@ -1086,19 +1055,16 @@
         }
 
         sendBtn.addEventListener('click', () => sendToAI(input.value));
-        input.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') sendToAI(input.value);
-        });
+        input.addEventListener('keypress', (e) => { if (e.key === 'Enter') sendToAI(input.value); });
 
-        // Quick prompts
         window.askQuick = function(q) {
             modal.classList.add('active');
             setTimeout(() => sendToAI(q), 300);
         };
 
-        // Voice Input (Speech Recognition)
+        // Voice Input
         let recognition = null;
-        if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+        if ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window) {
             const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
             recognition = new SpeechRecognition();
             recognition.continuous = false;
