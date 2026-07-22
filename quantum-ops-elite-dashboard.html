@@ -100,6 +100,33 @@
             box-shadow: 0 0 25px rgba(121, 40, 202, 0.85);
             transform: translateY(-1px);
         }
+
+        /* AI Chat Modal Styles */
+        #aiChatModal {
+            display: none;
+        }
+        #aiChatModal.active {
+            display: flex;
+        }
+        .ai-message {
+            max-width: 85%;
+            padding: 10px 14px;
+            border-radius: 12px;
+            margin-bottom: 10px;
+            font-size: 13px;
+            line-height: 1.4;
+        }
+        .ai-user {
+            background: rgba(0, 240, 255, 0.15);
+            border: 1px solid rgba(0, 240, 255, 0.3);
+            margin-left: auto;
+            color: #e0f7ff;
+        }
+        .ai-bot {
+            background: rgba(15, 23, 42, 0.9);
+            border: 1px solid rgba(0, 255, 102, 0.25);
+            color: #d1fae5;
+        }
     </style>
 </head>
 <body class="bg-[#030610] text-gray-200 font-ui antialiased min-h-screen flex flex-col overflow-x-hidden">
@@ -467,20 +494,20 @@
                     <!-- AI Controls -->
                     <div class="space-y-2">
                         <div class="flex items-center gap-2">
-                            <button class="flex-1 py-1.5 px-3 rounded-lg bg-cyan-950/80 border border-cyan-500 text-cyan-300 font-bold text-xs hover:bg-cyan-900/80 shadow-[0_0_10px_rgba(0,240,255,0.3)] transition-all">
+                            <button id="openAiChatBtn" class="flex-1 py-1.5 px-3 rounded-lg bg-cyan-950/80 border border-cyan-500 text-cyan-300 font-bold text-xs hover:bg-cyan-900/80 shadow-[0_0_10px_rgba(0,240,255,0.3)] transition-all">
                                 ASK AI CEO ANYTHING
                             </button>
-                            <button class="w-8 h-8 rounded-lg bg-cyan-950 border border-cyan-500 text-cyan-400 flex items-center justify-center">
+                            <button id="voiceBtn" class="w-8 h-8 rounded-lg bg-cyan-950 border border-cyan-500 text-cyan-400 flex items-center justify-center">
                                 <i class="fa-solid fa-microphone text-xs"></i>
                             </button>
                         </div>
 
                         <!-- Dynamic Prompts -->
                         <div class="grid grid-cols-2 gap-1 text-[9px]">
-                            <button class="p-1 rounded bg-slate-900 text-slate-300 hover:text-cyan-400 border border-slate-800 text-left truncate">⚙ Why are sales down?</button>
-                            <button class="p-1 rounded bg-slate-900 text-slate-300 hover:text-cyan-400 border border-slate-800 text-left truncate">⚙ Who owes me money?</button>
-                            <button class="p-1 rounded bg-slate-900 text-slate-300 hover:text-cyan-400 border border-slate-800 text-left truncate">⚙ Predict next month</button>
-                            <button class="p-1 rounded bg-slate-900 text-slate-300 hover:text-cyan-400 border border-slate-800 text-left truncate">⚙ Top performing products</button>
+                            <button onclick="askQuick('Why are sales down?')" class="p-1 rounded bg-slate-900 text-slate-300 hover:text-cyan-400 border border-slate-800 text-left truncate">⚙ Why are sales down?</button>
+                            <button onclick="askQuick('Who owes me money?')" class="p-1 rounded bg-slate-900 text-slate-300 hover:text-cyan-400 border border-slate-800 text-left truncate">⚙ Who owes me money?</button>
+                            <button onclick="askQuick('Predict next month')" class="p-1 rounded bg-slate-900 text-slate-300 hover:text-cyan-400 border border-slate-800 text-left truncate">⚙ Predict next month</button>
+                            <button onclick="askQuick('Top performing products')" class="p-1 rounded bg-slate-900 text-slate-300 hover:text-cyan-400 border border-slate-800 text-left truncate">⚙ Top performing products</button>
                         </div>
                     </div>
                 </div>
@@ -785,6 +812,51 @@
         </main>
     </div>
 
+    <!-- ===================== AI CEO CHAT MODAL ===================== -->
+    <div id="aiChatModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm items-center justify-center p-4">
+        <div class="w-full max-w-2xl bg-[#050814] border border-cyan-500/40 rounded-2xl shadow-2xl flex flex-col h-[85vh]">
+            <!-- Header -->
+            <div class="flex items-center justify-between px-5 py-4 border-b border-cyan-900/40">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-full bg-cyan-950 border border-cyan-400 flex items-center justify-center">
+                        <i class="fa-solid fa-robot text-cyan-400"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-white text-sm">AI CEO</h3>
+                        <p class="text-[10px] text-emerald-400 flex items-center gap-1">
+                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 led-pulse-green"></span> LIVE • Connected to your data
+                        </p>
+                    </div>
+                </div>
+                <button id="closeAiChat" class="w-8 h-8 rounded-full bg-slate-900 hover:bg-red-900/50 text-slate-400 hover:text-red-400">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <!-- Messages -->
+            <div id="aiMessages" class="flex-1 overflow-y-auto p-5 space-y-3">
+                <div class="ai-message ai-bot">
+                    Good evening, Commander. I have full access to your live business data (Revenue, Sales, Debtors, Inventory, Cash Flow, etc.). Ask me anything.
+                </div>
+            </div>
+
+            <!-- Input Area -->
+            <div class="p-4 border-t border-cyan-900/40">
+                <div class="flex gap-2">
+                    <input id="aiInput" type="text" placeholder="Ask about revenue, debtors, inventory, predictions..." 
+                           class="flex-1 bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-cyan-500">
+                    <button id="aiMicBtn" class="w-12 h-12 rounded-xl bg-cyan-950 border border-cyan-500 text-cyan-400 flex items-center justify-center">
+                        <i class="fa-solid fa-microphone"></i>
+                    </button>
+                    <button id="aiSendBtn" class="w-12 h-12 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white flex items-center justify-center">
+                        <i class="fa-solid fa-paper-plane"></i>
+                    </button>
+                </div>
+                <p class="text-[10px] text-slate-500 mt-2 text-center">Voice supported • Click the mic and speak</p>
+            </div>
+        </div>
+    </div>
+
     <!-- ==========================================
          JAVASCRIPT FOR REAL-TIME ANIMATIONS & CHARTS
     =========================================== -->
@@ -958,6 +1030,101 @@
 
         // 7. API URL
         const API_URL = "https://script.google.com/macros/s/AKfycbzy5OVPf1zk4Quy_RvrictzgLVWFZ77E4VL1PnR7gcPexkffVCNoxsun0zceBMRBAxm/exec";
+
+        // ===================== AI CEO CHAT + VOICE =====================
+        const modal = document.getElementById('aiChatModal');
+        const messagesDiv = document.getElementById('aiMessages');
+        const input = document.getElementById('aiInput');
+        const sendBtn = document.getElementById('aiSendBtn');
+        const micBtn = document.getElementById('aiMicBtn');
+        const openBtn = document.getElementById('openAiChatBtn');
+        const closeBtn = document.getElementById('closeAiChat');
+        const voiceBtn = document.getElementById('voiceBtn');
+
+        openBtn.addEventListener('click', () => modal.classList.add('active'));
+        closeBtn.addEventListener('click', () => modal.classList.remove('active'));
+        voiceBtn.addEventListener('click', () => modal.classList.add('active'));
+
+        function addMessage(text, isUser = false) {
+            const div = document.createElement('div');
+            div.className = `ai-message ${isUser ? 'ai-user' : 'ai-bot'}`;
+            div.textContent = text;
+            messagesDiv.appendChild(div);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+
+        async function sendToAI(question) {
+            if (!question.trim()) return;
+            addMessage(question, true);
+            input.value = '';
+
+            addMessage('Analyzing your live data...', false);
+
+            try {
+                const res = await fetch(API_URL, {
+                    method: 'POST',
+                    body: JSON.stringify({ action: 'askAI', message: question })
+                });
+                const data = await res.json();
+                const reply = data.data?.response || data.message || 'I am ready to help with your business data.';
+                
+                // Remove "Analyzing..." message
+                messagesDiv.lastChild.remove();
+                addMessage(reply, false);
+
+                // Voice output
+                if ('speechSynthesis' in window) {
+                    const utter = new SpeechSynthesisUtterance(reply);
+                    utter.rate = 0.95;
+                    utter.pitch = 1;
+                    speechSynthesis.speak(utter);
+                }
+            } catch (err) {
+                messagesDiv.lastChild.remove();
+                addMessage('Connection issue. Please try again.', false);
+            }
+        }
+
+        sendBtn.addEventListener('click', () => sendToAI(input.value));
+        input.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') sendToAI(input.value);
+        });
+
+        // Quick prompts
+        window.askQuick = function(q) {
+            modal.classList.add('active');
+            setTimeout(() => sendToAI(q), 300);
+        };
+
+        // Voice Input (Speech Recognition)
+        let recognition = null;
+        if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            recognition = new SpeechRecognition();
+            recognition.continuous = false;
+            recognition.interimResults = false;
+            recognition.lang = 'en-US';
+
+            recognition.onresult = (event) => {
+                const transcript = event.results[0][0].transcript;
+                input.value = transcript;
+                sendToAI(transcript);
+            };
+
+            recognition.onerror = () => {
+                addMessage('Voice recognition error. Please try again or type.', false);
+            };
+        }
+
+        micBtn.addEventListener('click', () => {
+            if (!recognition) {
+                alert('Voice not supported in this browser. Please use Chrome.');
+                return;
+            }
+            micBtn.classList.add('bg-red-600');
+            recognition.start();
+            setTimeout(() => micBtn.classList.remove('bg-red-600'), 4000);
+        });
     </script>
 </body>
 </html>
