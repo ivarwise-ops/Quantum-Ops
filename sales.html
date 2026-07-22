@@ -187,9 +187,11 @@
 const API_URL = "https://script.google.com/macros/s/AKfycbyfNAbemyRzGRfokWNHfr3Ted56MOr2iTERI8RFV8zhkMcuTD5dyTJ4TX98vlfCIgRA/exec";
 let itemCount = 0;
 let lastSaleData = null;
+
 function goToDashboard() {
     window.location.href = "quantum-ops-elite-dashboard.html";
 }
+
 function openNewSale() {
     document.getElementById('newSaleModal').classList.remove('hidden');
     document.getElementById('saleDate').valueAsDate = new Date();
@@ -198,9 +200,11 @@ function openNewSale() {
     addItemRow();
     calculateTotal();
 }
+
 function closeNewSale() {
     document.getElementById('newSaleModal').classList.add('hidden');
 }
+
 function addItemRow() {
     itemCount++;
     const div = document.createElement('div');
@@ -215,6 +219,7 @@ function addItemRow() {
     `;
     document.getElementById('itemsContainer').appendChild(div);
 }
+
 function calculateTotal() {
     let total = 0;
     document.querySelectorAll('#itemsContainer > div').forEach(row => {
@@ -224,12 +229,15 @@ function calculateTotal() {
     });
     document.getElementById('grandTotal').textContent = '$' + total.toFixed(2);
 }
+
 async function saveSale() {
     const customer = document.getElementById('customerName').value.trim();
     const date = document.getElementById('saleDate').value;
     const status = document.getElementById('paymentStatus').value;
     const type = document.getElementById('paymentType').value;
+    
     if (!customer) return alert("Please enter customer name");
+
     const items = [];
     document.querySelectorAll('#itemsContainer > div').forEach(row => {
         const name = row.querySelector('.item-name').value.trim();
@@ -239,21 +247,31 @@ async function saveSale() {
             items.push({ name, qty, price, total: qty * price });
         }
     });
+
     if (items.length === 0) return alert("Add at least one item");
+
     const totalAmount = items.reduce((sum, i) => sum + i.total, 0);
+
     try {
         const res = await fetch(API_URL, {
             method: 'POST',
+            headers: {
+                'Content-Type': 'text/plain' // Fixes Google Apps Script CORS preflight redirect dropping payload
+            },
             body: JSON.stringify({
                 action: 'addSale',
+                company_id: 'COMP-001',
+                customer_name: customer,
                 customer: customer,
                 date: date,
                 items: items,
                 total_amount: totalAmount,
                 payment_status: status,
-                payment_type: type
+                payment_type: type,
+                cashier_id: 'CASHIER-01'
             })
         });
+
         const data = await res.json();
         if (data.success || data.status === "success") {
             const now = new Date();
@@ -277,6 +295,7 @@ async function saveSale() {
         alert("Connection error. Please check your internet or Apps Script deployment.");
     }
 }
+
 function showReceipt(data) {
     document.getElementById('rSaleId').textContent = data.saleId;
     document.getElementById('rDate').textContent = data.date;
@@ -284,6 +303,7 @@ function showReceipt(data) {
     document.getElementById('rCustomer').textContent = data.customer;
     document.getElementById('rPayment').textContent = data.payment;
     document.getElementById('rTotal').textContent = "$" + data.total.toFixed(2);
+    
     const itemsHtml = data.items.map(item => `
         <div class="grid grid-cols-12">
             <div class="col-span-6">${item.name}</div>
@@ -295,9 +315,11 @@ function showReceipt(data) {
     document.getElementById('rItems').innerHTML = itemsHtml;
     document.getElementById('receiptModal').classList.remove('hidden');
 }
+
 function closeReceipt() {
     document.getElementById('receiptModal').classList.add('hidden');
 }
+
 function shareWhatsApp() {
     if (!lastSaleData) return;
     let text = `*QUANTUM OPS ELITE - SALES RECEIPT*\n\n`;
@@ -312,6 +334,7 @@ function shareWhatsApp() {
     text += `Payment: ${lastSaleData.payment}\n\nThank you!`;
     window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
 }
+
 function shareEmail() {
     if (!lastSaleData) return;
     const subject = `Sales Receipt - ${lastSaleData.saleId}`;
@@ -326,10 +349,14 @@ function shareEmail() {
     body += `Payment: ${lastSaleData.payment}\n\nThank you for your business.`;
     window.location.href = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 }
+
 async function loadSales() {
     try {
         const res = await fetch(API_URL, {
             method: 'POST',
+            headers: {
+                'Content-Type': 'text/plain'
+            },
             body: JSON.stringify({ action: 'getSales' })
         });
         const data = await res.json();
@@ -339,6 +366,7 @@ async function loadSales() {
         console.error(e);
     }
 }
+
 function renderTable(sales) {
     const tbody = document.getElementById('salesTable');
     tbody.innerHTML = '';
@@ -358,8 +386,8 @@ function renderTable(sales) {
         tr.className = 'hover:bg-slate-900/40 transition';
         tr.innerHTML = `
             <td class="p-4 text-sm">${dateStr || '-'}</td>
-            <td class="p-4 font-medium">${s.customer || s.customer_id || '-'}</td>
-            <td class="p-4 text-sm text-slate-400">Multiple items</td>
+            <td class="p-4 font-medium">${s.customer_name || s.customer || s.customer_id || '-'}</td>
+            <td class="p-4 text-sm text-slate-400">${s.item || 'Multiple items'}</td>
             <td class="p-4 text-right font-bold text-emerald-400">$${amount.toLocaleString()}</td>
             <td class="p-4 text-center">
                 <span class="px-3 py-1 rounded-full text-xs ${ (s.payment_status || 'Paid') === 'Paid' ? 'bg-emerald-900/60 text-emerald-400' : 'bg-amber-900/60 text-amber-400'}">
@@ -369,10 +397,10 @@ function renderTable(sales) {
             <td class="p-4 text-center">
                 <button onclick='quickReceipt(${JSON.stringify({
                     saleId: s.sale_id || s.saleId || "-",
-                    customer: s.customer || s.customer_id || "-",
+                    customer: s.customer_name || s.customer || s.customer_id || "-",
                     date: dateStr,
                     time: "",
-                    items: [{name:"Items", qty:1, price:amount, total:amount}],
+                    items: [{name: s.item || "Items", qty: 1, price: amount, total: amount}],
                     total: amount,
                     payment: (s.payment_status || "Paid") + " • " + (s.payment_type || "")
                 }).replace(/'/g, "&#39;")})' class="text-cyan-400 hover:text-cyan-300 text-sm">
@@ -387,10 +415,12 @@ function renderTable(sales) {
     document.getElementById('txCount').textContent = count;
     document.getElementById('avgSale').textContent = count ? '$' + (monthTotal / count).toFixed(0) : '$0';
 }
+
 function quickReceipt(data) {
     lastSaleData = data;
     showReceipt(data);
 }
+
 window.onload = loadSales;
 </script>
 </body>
