@@ -1,929 +1,607 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Quantum OPS Elite - AI Business Command Center</title>
-  
-  <!-- Font Awesome & Custom Digital LED Fonts -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;800;900&family=Rajdhani:wght@500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
-  
-  <!-- Chart.js for Live Dynamic Charts -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-  <style>
-    :root {
-      --bg-dark: #030611;
-      --card-bg: rgba(10, 16, 30, 0.85);
-      --border-color: rgba(0, 240, 255, 0.18);
-      --cyan-glow: #00f0ff;
-      --green-glow: #00ff66;
-      --orange-glow: #ff9900;
-      --red-glow: #ff0055;
-      --purple-glow: #bc13fe;
-      --yellow-glow: #ffe600;
-      --text-bright: #ffffff;
-      --text-dim: #64748b;
-    }
-
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-
-    body {
-      background-color: var(--bg-dark);
-      background-image: 
-        radial-gradient(circle at 50% 0%, rgba(0, 240, 255, 0.08) 0%, transparent 50%),
-        radial-gradient(circle at 80% 80%, rgba(188, 19, 254, 0.05) 0%, transparent 40%);
-      color: var(--text-bright);
-      font-family: 'Rajdhani', sans-serif;
-      display: flex;
-      height: 100vh;
-      overflow: hidden;
-    }
-
-    /* DIGITAL LED DISPLAY STYLING & ANIMATIONS */
-    .led-digit {
-      font-family: 'Share Tech Mono', monospace;
-      letter-spacing: 1px;
-      text-shadow: 0 0 10px currentColor, 0 0 20px currentColor;
-      animation: ledPulse 3s infinite alternate;
-    }
-
-    @keyframes ledPulse {
-      0% { text-shadow: 0 0 8px currentColor; opacity: 0.95; }
-      100% { text-shadow: 0 0 18px currentColor, 0 0 30px currentColor; opacity: 1; }
-    }
-
-    .led-cyan { color: var(--cyan-glow); }
-    .led-green { color: var(--green-glow); }
-    .led-orange { color: var(--orange-glow); }
-    .led-red { color: var(--red-glow); }
-    .led-purple { color: var(--purple-glow); }
-
-    /* LAYOUT WRAPPER */
-    .app-container { display: flex; width: 100vw; height: 100vh; }
-
-    /* 1. SIDEBAR NAVIGATION */
-    .sidebar {
-      width: 260px;
-      min-width: 260px;
-      background: rgba(6, 10, 20, 0.95);
-      border-right: 1px solid var(--border-color);
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      padding: 1rem;
-      z-index: 100;
-    }
-
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding-bottom: 0.8rem;
-      border-bottom: 1px solid var(--border-color);
-    }
-    .brand-logo {
-      width: 36px; height: 36px;
-      border-radius: 8px;
-      background: linear-gradient(135deg, var(--cyan-glow), var(--purple-glow));
-      display: flex; align-items: center; justify-content: center;
-      font-size: 1.3rem; color: #000; font-weight: 900;
-      box-shadow: 0 0 15px rgba(0, 240, 255, 0.6);
-    }
-    .brand-title { font-family: 'Orbitron', sans-serif; font-size: 1.05rem; font-weight: 900; letter-spacing: 0.5px; }
-    .brand-subtitle { font-size: 0.6rem; color: var(--cyan-glow); letter-spacing: 1px; font-weight: 700; }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quantum Ops Elite - AI Business Command Center</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Three.js for 3D AI Holographic Mesh -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     
-    .badge-elite {
-      background: rgba(255, 153, 0, 0.2);
-      border: 1px solid var(--orange-glow);
-      color: var(--orange-glow);
-      font-size: 0.6rem;
-      padding: 1px 5px;
-      border-radius: 4px;
-      font-weight: 800;
-    }
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800;900&family=Rajdhani:wght@500;600;700&display=swap');
 
-    .nav-menu {
-      list-style: none;
-      margin-top: 0.8rem;
-      overflow-y: auto;
-      flex-grow: 1;
-      padding-right: 4px;
-    }
-    .nav-menu::-webkit-scrollbar { width: 3px; }
-    .nav-menu::-webkit-scrollbar-thumb { background: rgba(0, 240, 255, 0.2); border-radius: 3px; }
+        :root {
+            --bg-dark: #05070d;
+            --card-bg: rgba(13, 19, 33, 0.85);
+            --neon-cyan: #00f3ff;
+            --neon-green: #00ff66;
+            --neon-yellow: #ffb700;
+            --neon-red: #ff2a5f;
+            --neon-purple: #b026ff;
+        }
 
-    .nav-item { margin-bottom: 2px; }
-    .nav-link {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0.45rem 0.6rem;
-      color: #94a3b8;
-      text-decoration: none;
-      border-radius: 6px;
-      font-weight: 600;
-      font-size: 0.82rem;
-      transition: all 0.2s ease;
-    }
-    .nav-link-left { display: flex; align-items: center; gap: 10px; }
-    .nav-link:hover { background: rgba(0, 240, 255, 0.08); color: var(--cyan-glow); }
-    .nav-link.active {
-      background: linear-gradient(90deg, rgba(255, 0, 85, 0.2), rgba(255, 0, 85, 0.02));
-      color: #fff;
-      border-left: 3px solid var(--red-glow);
-      box-shadow: 0 0 10px rgba(255, 0, 85, 0.2);
-    }
+        body {
+            background-color: var(--bg-dark);
+            color: #ffffff;
+            font-family: 'Rajdhani', sans-serif;
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 15% 15%, rgba(0, 243, 255, 0.05) 0%, transparent 40%),
+                radial-gradient(circle at 85% 85%, rgba(176, 38, 255, 0.05) 0%, transparent 40%);
+        }
 
-    .tag-live {
-      background: rgba(0, 255, 102, 0.15);
-      color: var(--green-glow);
-      border: 1px solid var(--green-glow);
-      font-size: 0.6rem;
-      padding: 1px 4px;
-      border-radius: 3px;
-      animation: blink 1.5s infinite;
-    }
-    .tag-count {
-      background: var(--red-glow);
-      color: #fff;
-      font-size: 0.65rem;
-      padding: 1px 6px;
-      border-radius: 10px;
-      font-weight: bold;
-    }
+        .font-digital {
+            font-family: 'Orbitron', monospace;
+        }
 
-    /* USER & UPGRADE BANNER */
-    .user-profile {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 0.6rem;
-      background: rgba(15, 23, 42, 0.6);
-      border: 1px solid rgba(255, 255, 255, 0.05);
-      border-radius: 8px;
-      margin-top: 0.5rem;
-    }
-    .avatar-img {
-      width: 32px; height: 32px;
-      border-radius: 50%;
-      border: 2px solid var(--green-glow);
-      box-shadow: 0 0 8px var(--green-glow);
-    }
+        /* --- GLOW & ANIMATION EFFECTS --- */
+        .glow-card-cyan {
+            border: 1px solid rgba(0, 243, 255, 0.3);
+            box-shadow: 0 0 15px rgba(0, 243, 255, 0.15), inset 0 0 10px rgba(0, 243, 255, 0.05);
+            animation: pulse-cyan 4s infinite alternate;
+        }
+        .glow-card-green {
+            border: 1px solid rgba(0, ff66, 102, 0.3);
+            box-shadow: 0 0 15px rgba(0, 255, 102, 0.15), inset 0 0 10px rgba(0, 255, 102, 0.05);
+            animation: pulse-green 4s infinite alternate;
+        }
+        .glow-card-yellow {
+            border: 1px solid rgba(255, 183, 0, 0.3);
+            box-shadow: 0 0 15px rgba(255, 183, 0, 0.15), inset 0 0 10px rgba(255, 183, 0, 0.05);
+            animation: pulse-yellow 4s infinite alternate;
+        }
+        .glow-card-red {
+            border: 1px solid rgba(255, 42, 95, 0.3);
+            box-shadow: 0 0 15px rgba(255, 42, 95, 0.15), inset 0 0 10px rgba(255, 42, 95, 0.05);
+            animation: pulse-red 4s infinite alternate;
+        }
+        .glow-card-purple {
+            border: 1px solid rgba(176, 38, 255, 0.3);
+            box-shadow: 0 0 15px rgba(176, 38, 255, 0.15), inset 0 0 10px rgba(176, 38, 255, 0.05);
+            animation: pulse-purple 4s infinite alternate;
+        }
 
-    .upgrade-box {
-      background: linear-gradient(135deg, rgba(20, 10, 40, 0.9), rgba(10, 5, 25, 0.95));
-      border: 1px solid rgba(188, 19, 254, 0.4);
-      border-radius: 10px;
-      padding: 0.8rem;
-      margin-top: 0.6rem;
-      box-shadow: 0 0 15px rgba(188, 19, 254, 0.15);
-    }
-    .upgrade-btn {
-      width: 100%;
-      padding: 0.5rem;
-      margin-top: 0.5rem;
-      background: linear-gradient(90deg, #6366f1, #bc13fe);
-      border: none;
-      border-radius: 6px;
-      color: #fff;
-      font-weight: 800;
-      font-size: 0.75rem;
-      cursor: pointer;
-      box-shadow: 0 0 12px rgba(188, 19, 254, 0.5);
-      transition: all 0.3s;
-    }
-    .upgrade-btn:hover { box-shadow: 0 0 20px rgba(188, 19, 254, 0.9); transform: scale(1.02); }
+        @keyframes pulse-cyan {
+            0% { box-shadow: 0 0 12px rgba(0, 243, 255, 0.2); }
+            100% { box-shadow: 0 0 22px rgba(0, 243, 255, 0.4); }
+        }
+        @keyframes pulse-green {
+            0% { box-shadow: 0 0 12px rgba(0, 255, 102, 0.2); }
+            100% { box-shadow: 0 0 22px rgba(0, 255, 102, 0.4); }
+        }
+        @keyframes pulse-yellow {
+            0% { box-shadow: 0 0 12px rgba(255, 183, 0, 0.2); }
+            100% { box-shadow: 0 0 22px rgba(255, 183, 0, 0.4); }
+        }
+        @keyframes pulse-red {
+            0% { box-shadow: 0 0 12px rgba(255, 42, 95, 0.2); }
+            100% { box-shadow: 0 0 22px rgba(255, 42, 95, 0.4); }
+        }
+        @keyframes pulse-purple {
+            0% { box-shadow: 0 0 12px rgba(176, 38, 255, 0.2); }
+            100% { box-shadow: 0 0 22px rgba(176, 38, 255, 0.4); }
+        }
 
-    /* MAIN VIEWPORT */
-    .main-viewport {
-      flex-grow: 1;
-      display: flex;
-      flex-direction: column;
-      overflow-y: auto;
-      padding: 1rem 1.2rem;
-    }
-    .main-viewport::-webkit-scrollbar { width: 5px; }
-    .main-viewport::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 4px; }
+        .live-dot {
+            animation: blink 1.2s infinite ease-in-out;
+        }
+        @keyframes blink {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.3; transform: scale(0.85); }
+        }
 
-    /* 2. TOP HEADER BAR */
-    .top-bar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 1rem;
-    }
-    .welcome-title { font-family: 'Orbitron', sans-serif; font-size: 1.25rem; font-weight: 800; letter-spacing: 0.5px; }
-    
-    .search-bar {
-      background: rgba(10, 16, 30, 0.8);
-      border: 1px solid var(--border-color);
-      border-radius: 8px;
-      padding: 0.45rem 0.8rem;
-      display: flex; align-items: center; gap: 8px;
-      width: 260px;
-    }
-    .search-bar input {
-      background: transparent; border: none; outline: none; color: #fff; font-size: 0.85rem; width: 100%;
-    }
+        /* LED Segment Glow Text */
+        .led-cyan { color: var(--neon-cyan); text-shadow: 0 0 10px rgba(0, 243, 255, 0.8); }
+        .led-green { color: var(--neon-green); text-shadow: 0 0 10px rgba(0, 255, 102, 0.8); }
+        .led-yellow { color: var(--neon-yellow); text-shadow: 0 0 10px rgba(255, 183, 0, 0.8); }
+        .led-red { color: var(--neon-red); text-shadow: 0 0 10px rgba(255, 42, 95, 0.8); }
+        .led-purple { color: var(--neon-purple); text-shadow: 0 0 10px rgba(176, 38, 255, 0.8); }
 
-    .top-actions { display: flex; align-items: center; gap: 12px; }
-    .action-icon {
-      width: 32px; height: 32px;
-      border-radius: 8px;
-      background: rgba(15, 23, 42, 0.8);
-      border: 1px solid var(--border-color);
-      display: flex; align-items: center; justify-content: center;
-      color: #94a3b8; cursor: pointer; position: relative;
-    }
-    .action-icon:hover { color: var(--cyan-glow); border-color: var(--cyan-glow); }
-    .badge-dot {
-      position: absolute; top: -3px; right: -3px; background: var(--red-glow); color: #fff;
-      font-size: 0.55rem; padding: 1px 4px; border-radius: 8px; font-weight: bold;
-    }
-
-    /* DIGITAL LED CLOCK WIDGET */
-    .clock-card {
-      background: rgba(0, 0, 0, 0.7);
-      border: 1px solid rgba(0, 240, 255, 0.3);
-      box-shadow: 0 0 15px rgba(0, 240, 255, 0.15);
-      border-radius: 8px;
-      padding: 0.3rem 0.8rem;
-      text-align: right;
-    }
-    .clock-time { font-family: 'Share Tech Mono', monospace; font-size: 1.25rem; color: var(--cyan-glow); text-shadow: 0 0 10px var(--cyan-glow); }
-    .clock-date { font-family: 'Share Tech Mono', monospace; font-size: 0.65rem; color: var(--red-glow); letter-spacing: 1.5px; }
-
-    /* GRID DASHBOARD LAYOUT */
-    .dashboard-grid {
-      display: grid;
-      grid-template-columns: repeat(12, 1fr);
-      gap: 0.9rem;
-    }
-
-    .card {
-      background: var(--card-bg);
-      border: 1px solid var(--border-color);
-      border-radius: 10px;
-      padding: 0.85rem;
-      backdrop-filter: blur(10px);
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
-      position: relative;
-    }
-
-    .card-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 0.7rem;
-      color: var(--text-dim);
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      margin-bottom: 0.4rem;
-    }
-
-    /* 3. TOP METRICS CARDS (5 CARDS) */
-    .metric-card { grid-column: span 2.4; }
-    .metric-value { font-size: 1.45rem; font-weight: 900; margin: 0.2rem 0; }
-    .metric-sub { font-size: 0.68rem; display: flex; align-items: center; gap: 4px; font-weight: 600; }
-
-    /* 4. MIDDLE SECTION */
-    .overview-card { grid-column: span 5; }
-    .revenue-card { grid-column: span 3; }
-    
-    /* AI CEO CARD & HOLOGRAPHIC ANIMATED AVATAR */
-    .ai-ceo-card {
-      grid-column: span 4;
-      background: linear-gradient(135deg, rgba(8, 15, 30, 0.95), rgba(20, 10, 40, 0.9));
-      border: 1px solid var(--cyan-glow);
-      box-shadow: 0 0 25px rgba(0, 240, 255, 0.25);
-    }
-    
-    .ai-container { display: flex; gap: 12px; margin-bottom: 0.6rem; align-items: center; }
-    
-    /* ANIMATED HOLOGRAPHIC AI AVATAR */
-    .ai-holo-avatar {
-      width: 75px;
-      height: 75px;
-      min-width: 75px;
-      position: relative;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .ai-holo-avatar svg {
-      width: 100%; height: 100%;
-      filter: drop-shadow(0 0 8px var(--cyan-glow));
-    }
-
-    /* AI LIGHT ANIMATIONS */
-    .holo-ring-1 {
-      transform-origin: center;
-      animation: rotateRing 8s linear infinite;
-    }
-    .holo-ring-2 {
-      transform-origin: center;
-      animation: rotateRingRev 12s linear infinite;
-    }
-    .holo-face {
-      animation: pulseFace 2.5s ease-in-out infinite alternate;
-    }
-
-    @keyframes rotateRing { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-    @keyframes rotateRingRev { 0% { transform: rotate(0deg); } 100% { transform: rotate(-360deg); } }
-    @keyframes pulseFace {
-      0% { opacity: 0.7; filter: drop-shadow(0 0 4px var(--cyan-glow)); }
-      100% { opacity: 1; filter: drop-shadow(0 0 15px var(--cyan-glow)) drop-shadow(0 0 25px var(--purple-glow)); }
-    }
-
-    .ai-speech {
-      background: rgba(0, 0, 0, 0.6);
-      border-left: 3px solid var(--cyan-glow);
-      padding: 0.5rem 0.7rem;
-      border-radius: 4px;
-      font-size: 0.75rem;
-      color: #cbd5e1;
-      line-height: 1.3;
-    }
-
-    .ai-prompt-btn {
-      width: 100%;
-      padding: 0.5rem;
-      background: linear-gradient(90deg, #0284c7, #00f0ff);
-      border: none;
-      border-radius: 6px;
-      color: #000;
-      font-weight: 900;
-      font-size: 0.75rem;
-      cursor: pointer;
-      display: flex; align-items: center; justify-content: center; gap: 6px;
-      box-shadow: 0 0 15px rgba(0, 240, 255, 0.4);
-    }
-
-    .ai-chips { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 0.5rem; }
-    .chip {
-      background: rgba(0, 240, 255, 0.08);
-      border: 1px solid rgba(0, 240, 255, 0.2);
-      border-radius: 12px;
-      padding: 2px 8px;
-      font-size: 0.62rem;
-      color: var(--cyan-glow);
-      cursor: pointer;
-    }
-    .chip:hover { background: rgba(0, 240, 255, 0.2); }
-
-    /* 5. MODULE ACCESS & TABLES */
-    .quick-modules { grid-column: span 5; display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; }
-    .module-tile {
-      background: rgba(15, 23, 42, 0.7);
-      border: 1px solid var(--border-color);
-      border-radius: 6px;
-      padding: 0.4rem;
-      text-align: center;
-      transition: all 0.2s;
-    }
-    .module-tile:hover { transform: translateY(-2px); border-color: var(--cyan-glow); }
-    .module-tile i { font-size: 1rem; margin-bottom: 2px; }
-    .module-tile .m-title { font-size: 0.6rem; color: var(--text-dim); text-transform: uppercase; font-weight: bold; }
-    .module-tile .m-val { font-size: 0.78rem; font-weight: 800; margin-top: 2px; }
-
-    .debtors-card { grid-column: span 7; }
-    
-    table { width: 100%; border-collapse: collapse; font-size: 0.75rem; }
-    th { text-align: left; padding: 0.35rem 0.5rem; color: var(--text-dim); border-bottom: 1px solid var(--border-color); font-size: 0.65rem; }
-    td { padding: 0.35rem 0.5rem; border-bottom: 1px solid rgba(255, 255, 255, 0.03); }
-
-    .status-badge {
-      padding: 1px 6px; border-radius: 4px; font-size: 0.6rem; font-weight: 800; text-transform: uppercase; display: inline-block;
-    }
-    .status-overdue { background: rgba(255, 0, 85, 0.2); color: var(--red-glow); border: 1px solid var(--red-glow); }
-    .status-due { background: rgba(255, 153, 0, 0.2); color: var(--orange-glow); border: 1px solid var(--orange-glow); }
-
-    /* 6. HEALTH & PREDICTIONS */
-    .cashflow-card { grid-column: span 2.4; }
-    .health-card { grid-column: span 2.4; }
-    .prediction-card { grid-column: span 2.4; }
-    .alerts-card { grid-column: span 2.4; }
-    .reminders-card { grid-column: span 2.4; }
-
-    /* RADIAL HEALTH GAUGE */
-    .gauge-wrapper { position: relative; width: 85px; height: 85px; margin: 0 auto; }
-    .gauge-center {
-      position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-      text-align: center;
-    }
-    .gauge-percent { font-size: 1.1rem; font-weight: 900; color: var(--green-glow); }
-    .gauge-label { font-size: 0.5rem; color: var(--text-dim); letter-spacing: 0.5px; }
-
-    .health-bars { margin-top: 0.4rem; font-size: 0.62rem; }
-    .health-row { display: flex; justify-content: space-between; margin-bottom: 2px; }
-    .progress-bg { background: rgba(255,255,255,0.08); height: 3px; border-radius: 2px; width: 100%; margin-bottom: 4px; }
-    .progress-fill { background: var(--green-glow); height: 100%; border-radius: 2px; box-shadow: 0 0 6px var(--green-glow); }
-
-    /* 7. BOTTOM METRICS & SYSTEM STATUS */
-    .activity-card { grid-column: span 2.4; }
-    .bottom-stat { grid-column: span 1.6; }
-    .status-card { grid-column: span 1.6; }
-
-    .activity-item {
-      display: flex; justify-content: space-between; align-items: center;
-      font-size: 0.68rem; padding: 0.25rem 0; border-bottom: 1px solid rgba(255,255,255,0.03);
-    }
-    .activity-item i { margin-right: 4px; }
-
-    .status-row { display: flex; justify-content: space-between; font-size: 0.65rem; padding: 2px 0; }
-    .status-dot { width: 6px; height: 6px; border-radius: 50%; display: inline-block; margin-right: 4px; }
-    .dot-online { background: var(--green-glow); box-shadow: 0 0 6px var(--green-glow); }
-    
-    @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
-  </style>
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #05070d; }
+        ::-webkit-scrollbar-thumb { background: #1f293d; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--neon-cyan); }
+    </style>
 </head>
-<body>
+<body class="p-4">
 
-<div class="app-container">
-
-  <!-- ================= 1. SIDEBAR NAVIGATION ================= -->
-  <aside class="sidebar">
-    <div>
-      <div class="brand">
-        <div class="brand-logo">Q</div>
-        <div>
-          <div style="display: flex; align-items: center; gap: 4px;">
-            <span class="brand-title">QUANTUM OPS</span>
-            <span class="badge-elite">ELITE</span>
-          </div>
-          <div class="brand-subtitle">AI BUSINESS COMMAND CENTER</div>
+    <!-- TOP HEADER -->
+    <header class="flex flex-col lg:flex-row items-center justify-between gap-4 mb-6 bg-slate-950/80 p-4 rounded-xl border border-slate-800 backdrop-blur-md">
+        <!-- Logo -->
+        <div class="flex items-center gap-3">
+            <div class="relative w-12 h-12 flex items-center justify-center bg-cyan-950/60 border border-cyan-500/50 rounded-lg glow-card-cyan">
+                <i class="fa-solid fa-crosshairs text-2xl text-cyan-400"></i>
+                <span class="absolute font-digital font-bold text-lg text-white">Q</span>
+            </div>
+            <div>
+                <h1 class="text-xl font-bold font-digital tracking-wider text-white">QUANTUM OPS <span class="text-xs text-cyan-400 font-normal">ELITE</span></h1>
+                <p class="text-xs text-slate-400 tracking-widest uppercase">AI Business Command Center</p>
+            </div>
         </div>
-      </div>
 
-      <ul class="nav-menu">
-        <li class="nav-item"><a href="#" class="nav-link active"><span class="nav-link-left"><i class="fa-solid fa-house"></i> DASHBOARD</span></a></li>
-        <li class="nav-item"><a href="#" class="nav-link"><span class="nav-link-left"><i class="fa-solid fa-robot"></i> AI CEO</span> <span class="tag-live">LIVE</span></a></li>
-        <li class="nav-item"><a href="#" class="nav-link"><span class="nav-link-left"><i class="fa-solid fa-chart-line"></i> SALES</span> <i class="fa-solid fa-chevron-right" style="font-size:0.6rem;"></i></a></li>
-        <li class="nav-item"><a href="#" class="nav-link"><span class="nav-link-left"><i class="fa-solid fa-boxes-stacked"></i> INVENTORY</span> <i class="fa-solid fa-chevron-right" style="font-size:0.6rem;"></i></a></li>
-        <li class="nav-item"><a href="#" class="nav-link"><span class="nav-link-left"><i class="fa-solid fa-hand-holding-dollar"></i> DEBTORS / CREDIT</span> <span class="tag-count">12</span></a></li>
-        <li class="nav-item"><a href="#" class="nav-link"><span class="nav-link-left"><i class="fa-solid fa-users"></i> CUSTOMERS (CRM)</span> <i class="fa-solid fa-chevron-right" style="font-size:0.6rem;"></i></a></li>
-        <li class="nav-item"><a href="#" class="nav-link"><span class="nav-link-left"><i class="fa-solid fa-file-invoice-dollar"></i> INVOICES</span> <i class="fa-solid fa-chevron-right" style="font-size:0.6rem;"></i></a></li>
-        <li class="nav-item"><a href="#" class="nav-link"><span class="nav-link-left"><i class="fa-solid fa-scale-balanced"></i> ACCOUNTING</span> <i class="fa-solid fa-chevron-right" style="font-size:0.6rem;"></i></a></li>
-        <li class="nav-item"><a href="#" class="nav-link"><span class="nav-link-left"><i class="fa-solid fa-receipt"></i> EXPENSES</span> <i class="fa-solid fa-chevron-right" style="font-size:0.6rem;"></i></a></li>
-        <li class="nav-item"><a href="#" class="nav-link"><span class="nav-link-left"><i class="fa-solid fa-user-gear"></i> EMPLOYEES / HR</span> <i class="fa-solid fa-chevron-right" style="font-size:0.6rem;"></i></a></li>
-        <li class="nav-item"><a href="#" class="nav-link"><span class="nav-link-left"><i class="fa-solid fa-truck-field"></i> SUPPLIERS</span> <i class="fa-solid fa-chevron-right" style="font-size:0.6rem;"></i></a></li>
-        <li class="nav-item"><a href="#" class="nav-link"><span class="nav-link-left"><i class="fa-solid fa-cart-shopping"></i> PURCHASES</span> <i class="fa-solid fa-chevron-right" style="font-size:0.6rem;"></i></a></li>
-        <li class="nav-item"><a href="#" class="nav-link"><span class="nav-link-left"><i class="fa-solid fa-diagram-project"></i> PROJECTS</span> <i class="fa-solid fa-chevron-right" style="font-size:0.6rem;"></i></a></li>
-        <li class="nav-item"><a href="#" class="nav-link"><span class="nav-link-left"><i class="fa-solid fa-list-check"></i> TASKS</span> <i class="fa-solid fa-chevron-right" style="font-size:0.6rem;"></i></a></li>
-        <li class="nav-item"><a href="#" class="nav-link"><span class="nav-link-left"><i class="fa-solid fa-calendar-days"></i> CALENDAR</span> <i class="fa-solid fa-chevron-right" style="font-size:0.6rem;"></i></a></li>
-        <li class="nav-item"><a href="#" class="nav-link"><span class="nav-link-left"><i class="fa-solid fa-folder-open"></i> DOCUMENTS</span> <i class="fa-solid fa-chevron-right" style="font-size:0.6rem;"></i></a></li>
-        <li class="nav-item"><a href="#" class="nav-link"><span class="nav-link-left"><i class="fa-solid fa-chart-pie"></i> REPORTS & ANALYTICS</span> <i class="fa-solid fa-chevron-right" style="font-size:0.6rem;"></i></a></li>
-        <li class="nav-item"><a href="#" class="nav-link"><span class="nav-link-left"><i class="fa-solid fa-network-wired"></i> AI WORKFLOW</span> <i class="fa-solid fa-chevron-right" style="font-size:0.6rem;"></i></a></li>
-        <li class="nav-item"><a href="#" class="nav-link"><span class="nav-link-left"><i class="fa-solid fa-sliders"></i> SETTINGS</span> <i class="fa-solid fa-chevron-right" style="font-size:0.6rem;"></i></a></li>
-      </ul>
-    </div>
-
-    <div>
-      <div class="user-profile">
-        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80" class="avatar-img" alt="User">
-        <div>
-          <div style="font-size: 0.8rem; font-weight: bold;">David John</div>
-          <div style="font-size: 0.65rem; color: var(--text-dim);">Administrator</div>
-          <div style="font-size: 0.6rem; color: var(--green-glow);">● ONLINE</div>
+        <!-- Greeting -->
+        <div class="text-center lg:text-left">
+            <p class="text-xs text-slate-400 tracking-widest">WELCOME BACK,</p>
+            <h2 class="text-xl font-bold font-digital flex items-center justify-center lg:justify-start gap-2 text-white">
+                COMMANDER <i class="fa-solid fa-crown text-amber-400 text-sm animate-bounce"></i>
+            </h2>
+            <p class="text-xs text-slate-400">Here's what's happening in your empire today.</p>
         </div>
-      </div>
 
-      <div class="upgrade-box">
-        <div style="font-size: 0.75rem; font-weight: 800; color: #fff;"><i class="fa-solid fa-crown" style="color:gold;"></i> UPGRADE TO ELITE</div>
-        <div style="font-size: 0.62rem; color: #94a3b8; margin-top: 4px;">
-          <div>✦ Unlimited Workflows</div>
-          <div>✦ Advanced AI Insights</div>
-          <div>✦ Priority Support</div>
-          <div>✦ Custom Integrations</div>
+        <!-- Search & Control Utilities -->
+        <div class="flex items-center gap-4 flex-wrap justify-center">
+            <div class="relative">
+                <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-slate-500 text-sm"></i>
+                <input type="text" placeholder="Search anything..." class="bg-slate-900 border border-slate-700 text-xs text-white pl-9 pr-4 py-2 rounded-full focus:outline-none focus:border-cyan-500 w-48 md:w-64 transition-all">
+            </div>
+
+            <div class="flex items-center gap-2">
+                <button class="w-9 h-9 bg-slate-900 border border-slate-700 rounded-lg flex items-center justify-center hover:border-cyan-400 hover:text-cyan-400 transition-all">
+                    <i class="fa-solid fa-chart-line text-sm"></i>
+                </button>
+                <button class="relative w-9 h-9 bg-slate-900 border border-slate-700 rounded-lg flex items-center justify-center hover:border-cyan-400 hover:text-cyan-400 transition-all">
+                    <i class="fa-regular fa-comment-dots text-sm"></i>
+                    <span class="absolute -top-1 -right-1 bg-red-600 text-[10px] font-bold px-1.5 py-0.2 rounded-full font-digital">8</span>
+                </button>
+                <button class="relative w-9 h-9 bg-slate-900 border border-slate-700 rounded-lg flex items-center justify-center hover:border-cyan-400 hover:text-cyan-400 transition-all">
+                    <i class="fa-regular fa-bell text-sm"></i>
+                    <span class="absolute -top-1 -right-1 bg-red-600 text-[10px] font-bold px-1.5 py-0.2 rounded-full font-digital">15</span>
+                </button>
+                <button class="w-9 h-9 bg-emerald-950 border border-emerald-500 rounded-full flex items-center justify-center text-emerald-400 font-bold font-digital text-xs shadow-[0_0_10px_rgba(0,255,102,0.4)]">
+                    AI
+                </button>
+                <button class="w-9 h-9 bg-slate-900 border border-slate-700 rounded-lg flex items-center justify-center hover:border-cyan-400 hover:text-cyan-400 transition-all">
+                    <i class="fa-solid fa-expand text-sm"></i>
+                </button>
+            </div>
+
+            <!-- Digital Real-time Animated Clock -->
+            <div class="bg-slate-950 border border-cyan-500/40 rounded-xl px-4 py-1.5 text-center glow-card-cyan">
+                <div id="live-time" class="font-digital text-lg font-bold led-cyan tracking-wider">00:00:00 AM</div>
+                <div class="flex justify-between items-center text-[10px] font-bold font-digital tracking-widest text-red-500">
+                    <span id="live-day">WEDNESDAY</span>
+                    <span id="live-date">22 MAY 2024</span>
+                </div>
+            </div>
         </div>
-        <button class="upgrade-btn">UPGRADE NOW</button>
-      </div>
-    </div>
-  </aside>
-
-  <!-- ================= MAIN VIEWPORT ================= -->
-  <main class="main-viewport">
-
-    <!-- ================= 2. TOP HEADER BAR ================= -->
-    <header class="top-bar">
-      <div>
-        <div style="font-size: 0.68rem; color: var(--cyan-glow); font-weight: bold; letter-spacing: 1px;">WELCOME BACK,</div>
-        <div class="welcome-title">COMMANDER <i class="fa-solid fa-crown" style="color: gold; font-size: 0.9rem;"></i></div>
-        <div style="font-size: 0.7rem; color: var(--text-dim);">Here's what's happening in your empire today.</div>
-      </div>
-
-      <div class="search-bar">
-        <i class="fa-solid fa-magnifying-glass" style="color: var(--text-dim);"></i>
-        <input type="text" placeholder="Search anything...">
-      </div>
-
-      <div class="top-actions">
-        <div class="action-icon"><i class="fa-solid fa-wave-square"></i></div>
-        <div class="action-icon"><i class="fa-regular fa-comment-dots"></i><span class="badge-dot">8</span></div>
-        <div class="action-icon"><i class="fa-regular fa-bell"></i><span class="badge-dot">15</span></div>
-        <div class="action-icon" style="color: var(--cyan-glow); font-weight: bold; font-size: 0.75rem;">AI</div>
-        <div class="action-icon"><i class="fa-solid fa-expand"></i></div>
-
-        <!-- TICKING DIGITAL CLOCK -->
-        <div class="clock-card">
-          <div class="clock-time" id="liveClock">00:00:00 AM</div>
-          <div class="clock-date" id="liveDate">LOADING DATE...</div>
-        </div>
-      </div>
     </header>
 
-    <!-- ================= DASHBOARD GRID ================= -->
-    <div class="dashboard-grid">
+    <!-- MAIN BODY GRID LAYOUT -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
 
-      <!-- ================= 3. TOP METRICS (5 CARDS) ================= -->
-      <div class="card metric-card">
-        <div class="card-header">TOTAL REVENUE <span>THIS MONTH</span> <i class="fa-solid fa-expand"></i></div>
-        <div class="metric-value led-digit led-cyan">$125,750.00</div>
-        <div class="metric-sub" style="color: var(--cyan-glow);"><i class="fa-solid fa-arrow-trend-up"></i> ↑ 18.6% VS LAST MONTH</div>
-      </div>
+        <!-- LEFT SIDEBAR NAV -->
+        <aside class="lg:col-span-2 space-y-4">
+            <nav class="bg-slate-950/80 border border-slate-800 rounded-xl p-3 space-y-1 font-semibold text-sm">
+                <a href="#" class="flex items-center justify-between px-3 py-2.5 rounded-lg bg-red-600/20 text-red-400 border border-red-500/50 glow-card-red">
+                    <span class="flex items-center gap-2"><i class="fa-solid fa-house"></i> DASHBOARD</span>
+                </a>
+                <a href="#" class="flex items-center justify-between px-3 py-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-900 transition-all">
+                    <span class="flex items-center gap-2"><i class="fa-solid fa-robot"></i> AI CEO</span>
+                    <span class="bg-emerald-500/20 text-emerald-400 border border-emerald-500/50 text-[9px] px-1.5 py-0.5 rounded font-digital live-dot">LIVE</span>
+                </a>
+                <a href="#" class="flex items-center justify-between px-3 py-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-900 transition-all">
+                    <span class="flex items-center gap-2"><i class="fa-solid fa-chart-pie"></i> SALES</span>
+                    <i class="fa-solid fa-chevron-right text-xs"></i>
+                </a>
+                <a href="#" class="flex items-center justify-between px-3 py-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-900 transition-all">
+                    <span class="flex items-center gap-2"><i class="fa-solid fa-boxes-stacked"></i> INVENTORY</span>
+                    <i class="fa-solid fa-chevron-right text-xs"></i>
+                </a>
+                <a href="#" class="flex items-center justify-between px-3 py-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-900 transition-all">
+                    <span class="flex items-center gap-2"><i class="fa-solid fa-hand-holding-dollar"></i> DEBTORS</span>
+                    <span class="bg-red-600/30 text-red-400 text-xs font-digital px-1.5 py-0.5 rounded">12</span>
+                </a>
+                <a href="#" class="flex items-center justify-between px-3 py-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-900 transition-all">
+                    <span class="flex items-center gap-2"><i class="fa-solid fa-users"></i> CUSTOMERS</span>
+                    <i class="fa-solid fa-chevron-right text-xs"></i>
+                </a>
+                <a href="#" class="flex items-center justify-between px-3 py-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-900 transition-all">
+                    <span class="flex items-center gap-2"><i class="fa-solid fa-file-invoice-dollar"></i> INVOICES</span>
+                    <i class="fa-solid fa-chevron-right text-xs"></i>
+                </a>
+                <a href="#" class="flex items-center justify-between px-3 py-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-900 transition-all">
+                    <span class="flex items-center gap-2"><i class="fa-solid fa-calculator"></i> ACCOUNTING</span>
+                    <i class="fa-solid fa-chevron-right text-xs"></i>
+                </a>
+                <a href="#" class="flex items-center justify-between px-3 py-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-900 transition-all">
+                    <span class="flex items-center gap-2"><i class="fa-solid fa-receipt"></i> EXPENSES</span>
+                    <i class="fa-solid fa-chevron-right text-xs"></i>
+                </a>
+                <a href="#" class="flex items-center justify-between px-3 py-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-900 transition-all">
+                    <span class="flex items-center gap-2"><i class="fa-solid fa-user-tie"></i> EMPLOYEES / HR</span>
+                    <i class="fa-solid fa-chevron-right text-xs"></i>
+                </a>
+                <a href="#" class="flex items-center justify-between px-3 py-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-900 transition-all">
+                    <span class="flex items-center gap-2"><i class="fa-solid fa-truck"></i> SUPPLIERS</span>
+                    <i class="fa-solid fa-chevron-right text-xs"></i>
+                </a>
+                <a href="#" class="flex items-center justify-between px-3 py-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-900 transition-all">
+                    <span class="flex items-center gap-2"><i class="fa-solid fa-cart-shopping"></i> PURCHASES</span>
+                    <i class="fa-solid fa-chevron-right text-xs"></i>
+                </a>
+                <a href="#" class="flex items-center justify-between px-3 py-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-900 transition-all">
+                    <span class="flex items-center gap-2"><i class="fa-solid fa-diagram-project"></i> PROJECTS</span>
+                    <i class="fa-solid fa-chevron-right text-xs"></i>
+                </a>
+                <a href="#" class="flex items-center justify-between px-3 py-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-900 transition-all">
+                    <span class="flex items-center gap-2"><i class="fa-solid fa-list-check"></i> TASKS</span>
+                    <i class="fa-solid fa-chevron-right text-xs"></i>
+                </a>
+                <a href="#" class="flex items-center justify-between px-3 py-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-900 transition-all">
+                    <span class="flex items-center gap-2"><i class="fa-solid fa-calendar-days"></i> CALENDAR</span>
+                    <i class="fa-solid fa-chevron-right text-xs"></i>
+                </a>
+                <a href="#" class="flex items-center justify-between px-3 py-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-900 transition-all">
+                    <span class="flex items-center gap-2"><i class="fa-solid fa-folder-open"></i> DOCUMENTS</span>
+                    <i class="fa-solid fa-chevron-right text-xs"></i>
+                </a>
+                <a href="#" class="flex items-center justify-between px-3 py-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-900 transition-all">
+                    <span class="flex items-center gap-2"><i class="fa-solid fa-gears"></i> SETTINGS</span>
+                    <i class="fa-solid fa-chevron-right text-xs"></i>
+                </a>
+            </nav>
 
-      <div class="card metric-card">
-        <div class="card-header">TOTAL PROFIT <span>THIS MONTH</span> <i class="fa-solid fa-expand"></i></div>
-        <div class="metric-value led-digit led-green">$32,850.00</div>
-        <div class="metric-sub" style="color: var(--green-glow);"><i class="fa-solid fa-arrow-trend-up"></i> ↑ 21.4% VS LAST MONTH</div>
-      </div>
+            <!-- User Avatar & Upgrade Box -->
+            <div class="bg-slate-950/80 border border-slate-800 rounded-xl p-3 space-y-3">
+                <div class="flex items-center gap-3">
+                    <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80" class="w-10 h-10 rounded-full border border-cyan-400 object-cover" alt="User Avatar">
+                    <div>
+                        <h4 class="text-xs font-bold text-white">David John</h4>
+                        <p class="text-[10px] text-slate-400">Administrator</p>
+                        <span class="flex items-center gap-1 text-[10px] text-emerald-400 font-bold"><span class="w-2 h-2 rounded-full bg-emerald-500 live-dot"></span> ONLINE</span>
+                    </div>
+                </div>
 
-      <div class="card metric-card">
-        <div class="card-header">TOTAL SALES <span>TODAY</span> <i class="fa-solid fa-expand"></i></div>
-        <div class="metric-value led-digit led-orange">99,850.00</div>
-        <div class="metric-sub" style="color: var(--orange-glow);"><i class="fa-solid fa-arrow-trend-up"></i> ↑ 16.2% VS YESTERDAY</div>
-      </div>
-
-      <div class="card metric-card">
-        <div class="card-header">OUTSTANDING DEBTS <span>TOTAL OWING</span> <i class="fa-solid fa-expand"></i></div>
-        <div class="metric-value led-digit led-red">$24,650.00</div>
-        <div class="metric-sub" style="color: var(--red-glow);"><i class="fa-solid fa-triangle-exclamation"></i> 12 OVERDUE</div>
-      </div>
-
-      <div class="card metric-card">
-        <div class="card-header">CASH BALANCE <span>AVAILABLE</span> <i class="fa-solid fa-expand"></i></div>
-        <div class="metric-value led-digit led-purple">$48,320.00</div>
-        <div class="metric-sub" style="color: var(--purple-glow);"><i class="fa-solid fa-arrow-trend-up"></i> ↑ 12.7% VS LAST MONTH</div>
-      </div>
-
-      <!-- ================= 4. MIDDLE SECTION ================= -->
-      <!-- BUSINESS OVERVIEW CHART -->
-      <div class="card overview-card">
-        <div class="card-header">BUSINESS OVERVIEW <span style="cursor:pointer;">THIS YEAR <i class="fa-solid fa-chevron-down"></i></span></div>
-        <canvas id="overviewChart" height="120"></canvas>
-      </div>
-
-      <!-- REVENUE BY MODULE -->
-      <div class="card revenue-card">
-        <div class="card-header">REVENUE BY MODULE <div><i class="fa-solid fa-plus"></i> <i class="fa-solid fa-arrow-up-long"></i></div></div>
-        <div style="display: flex; align-items: center; justify-content: space-around; height: 110px;">
-          <div style="position: relative; width: 100px; height: 100px;">
-            <canvas id="moduleChart"></canvas>
-            <div style="position: absolute; top:50%; left:50%; transform:translate(-50%,-50%); text-align:center;">
-              <div style="font-size:0.65rem; font-weight:bold;" class="led-cyan">$125,750</div>
-              <div style="font-size:0.45rem; color:var(--text-dim);">TOTAL</div>
+                <div class="p-3 bg-purple-950/30 border border-purple-500/40 rounded-xl glow-card-purple text-center space-y-2">
+                    <i class="fa-solid fa-crown text-amber-400 text-xl"></i>
+                    <h5 class="text-xs font-bold font-digital tracking-wide text-white">UPGRADE TO ELITE</h5>
+                    <ul class="text-[10px] text-slate-300 text-left space-y-1">
+                        <li><i class="fa-solid fa-star text-purple-400 mr-1"></i> Unlimited Workflows</li>
+                        <li><i class="fa-solid fa-star text-purple-400 mr-1"></i> Advanced AI Insights</li>
+                        <li><i class="fa-solid fa-star text-purple-400 mr-1"></i> Priority Support</li>
+                    </ul>
+                    <button class="w-full py-1.5 bg-purple-600 hover:bg-purple-500 text-white rounded-lg text-xs font-bold font-digital shadow-[0_0_15px_rgba(176,38,255,0.5)] transition-all">UPGRADE NOW</button>
+                </div>
             </div>
-          </div>
-          <div style="font-size: 0.65rem; line-height: 1.5;">
-            <div><span style="color:var(--cyan-glow);">●</span> Sales <span style="float:right; font-weight:bold; margin-left:8px;">40% $50,300</span></div>
-            <div><span style="color:var(--green-glow);">●</span> Services <span style="float:right; font-weight:bold; margin-left:8px;">25% $31,400</span></div>
-            <div><span style="color:var(--orange-glow);">●</span> Products <span style="float:right; font-weight:bold; margin-left:8px;">20% $25,150</span></div>
-            <div><span style="color:var(--purple-glow);">●</span> Projects <span style="float:right; font-weight:bold; margin-left:8px;">15% $18,900</span></div>
-          </div>
-        </div>
-      </div>
+        </aside>
 
-      <!-- AI CEO COMMAND CENTER WITH ANIMATED 3D HOLOGRAPHIC AVATAR -->
-      <div class="card ai-ceo-card">
-        <div class="card-header" style="color: var(--cyan-glow);">
-          AI CEO COMMAND CENTER 
-          <span style="color: var(--green-glow); font-size: 0.65rem;">● ONLINE</span>
-        </div>
-        
-        <div class="ai-container">
-          <!-- 3D LIGHT-ANIMATED AI AVATAR SVG -->
-          <div class="ai-holo-avatar">
-            <svg viewBox="0 0 100 100">
-              <!-- Outer Rotating Tech Ring -->
-              <circle class="holo-ring-1" cx="50" cy="50" r="46" fill="none" stroke="#00f0ff" stroke-width="1.5" stroke-dasharray="8 4 2 4" />
-              <circle class="holo-ring-2" cx="50" cy="50" r="40" fill="none" stroke="#bc13fe" stroke-width="1" stroke-dasharray="12 6" />
-              
-              <!-- Futuristic Grid Face Structure -->
-              <g class="holo-face">
-                <polygon points="50,15 75,30 75,65 50,85 25,65 25,30" fill="rgba(0,240,255,0.05)" stroke="#00f0ff" stroke-width="1.5"/>
-                <!-- Eye Lights -->
-                <circle cx="40" cy="40" r="3" fill="#00ff66" />
-                <circle cx="60" cy="40" r="3" fill="#00ff66" />
-                <line x1="40" y1="40" x2="60" y2="40" stroke="#00f0ff" stroke-width="1"/>
-                <!-- Nose & Mouth Grid Lines -->
-                <path d="M50,40 L50,55 M42,65 Q50,72 58,65" stroke="#00f0ff" stroke-width="1.5" fill="none"/>
-                <!-- Cyber Dots -->
-                <circle cx="50" cy="25" r="2" fill="#bc13fe"/>
-                <circle cx="32" cy="52" r="1.5" fill="#00f0ff"/>
-                <circle cx="68" cy="52" r="1.5" fill="#00f0ff"/>
-              </g>
-            </svg>
-          </div>
+        <!-- DASHBOARD CONTENT AREA -->
+        <main class="lg:col-span-10 space-y-6">
 
-          <div>
-            <div style="font-weight: 800; font-size: 0.85rem;">Good evening, Commander!</div>
-            <div class="ai-speech">
-              I've analyzed your business data and have some important insights for you today.
+            <!-- TOP 5 NEON METRIC CARDS -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+                <!-- Total Revenue -->
+                <div class="bg-slate-950/80 p-4 rounded-xl border glow-card-cyan space-y-2 relative overflow-hidden">
+                    <div class="flex justify-between items-center text-xs font-digital text-slate-400">
+                        <span>TOTAL REVENUE</span>
+                        <i class="fa-solid fa-expand text-[10px]"></i>
+                    </div>
+                    <div class="text-xl font-bold font-digital led-cyan" id="metric-revenue">$125,750.00</div>
+                    <div class="flex items-center gap-2 text-[10px] font-bold text-cyan-400">
+                        <span>↑ 18.6%</span> <span class="text-slate-500 font-normal">VS LAST MONTH</span>
+                    </div>
+                </div>
+
+                <!-- Total Profit -->
+                <div class="bg-slate-950/80 p-4 rounded-xl border glow-card-green space-y-2 relative overflow-hidden">
+                    <div class="flex justify-between items-center text-xs font-digital text-slate-400">
+                        <span>TOTAL PROFIT</span>
+                        <i class="fa-solid fa-expand text-[10px]"></i>
+                    </div>
+                    <div class="text-xl font-bold font-digital led-green" id="metric-profit">$32,850.00</div>
+                    <div class="flex items-center gap-2 text-[10px] font-bold text-emerald-400">
+                        <span>↑ 21.4%</span> <span class="text-slate-500 font-normal">VS LAST MONTH</span>
+                    </div>
+                </div>
+
+                <!-- Total Sales -->
+                <div class="bg-slate-950/80 p-4 rounded-xl border glow-card-yellow space-y-2 relative overflow-hidden">
+                    <div class="flex justify-between items-center text-xs font-digital text-slate-400">
+                        <span>TOTAL SALES</span>
+                        <i class="fa-solid fa-expand text-[10px]"></i>
+                    </div>
+                    <div class="text-xl font-bold font-digital led-yellow" id="metric-sales">$99,850.00</div>
+                    <div class="flex items-center gap-2 text-[10px] font-bold text-amber-400">
+                        <span>↑ 16.2%</span> <span class="text-slate-500 font-normal">VS YESTERDAY</span>
+                    </div>
+                </div>
+
+                <!-- Outstanding Debts -->
+                <div class="bg-slate-950/80 p-4 rounded-xl border glow-card-red space-y-2 relative overflow-hidden">
+                    <div class="flex justify-between items-center text-xs font-digital text-slate-400">
+                        <span>OUTSTANDING DEBTS</span>
+                        <i class="fa-solid fa-expand text-[10px]"></i>
+                    </div>
+                    <div class="text-xl font-bold font-digital led-red" id="metric-debts">$24,650.00</div>
+                    <div class="flex items-center gap-2 text-[10px] font-bold text-red-500">
+                        <span>12 OVERDUE</span>
+                    </div>
+                </div>
+
+                <!-- Cash Balance -->
+                <div class="bg-slate-950/80 p-4 rounded-xl border glow-card-purple space-y-2 relative overflow-hidden">
+                    <div class="flex justify-between items-center text-xs font-digital text-slate-400">
+                        <span>CASH BALANCE</span>
+                        <i class="fa-solid fa-expand text-[10px]"></i>
+                    </div>
+                    <div class="text-xl font-bold font-digital led-purple" id="metric-cash">$48,320.00</div>
+                    <div class="flex items-center gap-2 text-[10px] font-bold text-purple-400">
+                        <span>↑ 12.7%</span> <span class="text-slate-500 font-normal">VS LAST MONTH</span>
+                    </div>
+                </div>
             </div>
-          </div>
-        </div>
 
-        <div style="display: flex; gap: 6px;">
-          <button class="ai-prompt-btn"><i class="fa-solid fa-sparkles"></i> ASK AI CEO ANYTHING</button>
-          <button class="action-icon" style="height: 28px; width: 32px;"><i class="fa-solid fa-microphone"></i></button>
-        </div>
+            <!-- MIDDLE SECTION: CHARTS & 3D AI COMMAND CENTER -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
 
-        <div class="ai-chips">
-          <div class="chip">Why are sales down?</div>
-          <div class="chip">Who owes me money?</div>
-          <div class="chip">Predict next month</div>
-          <div class="chip">Top performing products</div>
-        </div>
-      </div>
+                <!-- Main Line Chart -->
+                <div class="lg:col-span-5 bg-slate-950/80 p-4 rounded-xl border border-slate-800 space-y-3">
+                    <div class="flex justify-between items-center text-xs font-digital">
+                        <span class="text-white font-bold">BUSINESS OVERVIEW</span>
+                        <select class="bg-slate-900 border border-slate-700 text-xs text-slate-300 rounded px-2 py-1 focus:outline-none">
+                            <option>THIS YEAR</option>
+                        </select>
+                    </div>
+                    <div class="h-56 relative">
+                        <canvas id="overviewChart"></canvas>
+                    </div>
+                </div>
 
-      <!-- ================= 5. QUICK MODULES & TOP DEBTORS ================= -->
-      <!-- QUICK ACCESS MODULES GRID -->
-      <div class="card quick-modules" style="grid-column: span 5; background: transparent; border: none; padding: 0; box-shadow: none;">
-        <div class="module-tile"><i class="fa-solid fa-chart-line" style="color:var(--cyan-glow);"></i><div class="m-title">SALES</div><div class="m-val led-digit led-cyan">$9,850.00</div><div style="font-size:0.5rem; color:var(--green-glow);">↑ 16.2%</div></div>
-        <div class="module-tile"><i class="fa-solid fa-boxes-stacked" style="color:var(--orange-glow);"></i><div class="m-title">INVENTORY</div><div class="m-val">2,450</div><div style="font-size:0.5rem; color:var(--orange-glow);">Low Stock: 23</div></div>
-        <div class="module-tile"><i class="fa-solid fa-hand-holding-dollar" style="color:var(--red-glow);"></i><div class="m-title">DEBTORS</div><div class="m-val led-digit led-red">$24,650</div><div style="font-size:0.5rem; color:var(--red-glow);">Overdue: 12</div></div>
-        <div class="module-tile"><i class="fa-solid fa-users" style="color:var(--green-glow);"></i><div class="m-title">CUSTOMERS</div><div class="m-val">2,847</div><div style="font-size:0.5rem; color:var(--green-glow);">↑ 12.3%</div></div>
-        <div class="module-tile"><i class="fa-solid fa-file-invoice" style="color:var(--purple-glow);"></i><div class="m-title">INVOICES</div><div class="m-val">18 Unpaid</div><div style="font-size:0.5rem; color:var(--red-glow);">$24,650</div></div>
-        <div class="module-tile"><i class="fa-solid fa-receipt" style="color:var(--red-glow);"></i><div class="m-title">EXPENSES</div><div class="m-val led-digit led-red">$2,845.00</div><div style="font-size:0.5rem; color:var(--red-glow);">↑ 9.4%</div></div>
-        <div class="module-tile"><i class="fa-solid fa-scale-balanced" style="color:var(--green-glow);"></i><div class="m-title">ACCOUNTING</div><div class="m-val led-digit led-green">$32,850.00</div><div style="font-size:0.5rem; color:var(--green-glow);">↑ 21.4%</div></div>
-        <div class="module-tile"><i class="fa-solid fa-user-gear" style="color:var(--cyan-glow);"></i><div class="m-title">EMPLOYEES</div><div class="m-val">24 Active</div><div style="font-size:0.5rem; color:var(--green-glow);">Active</div></div>
-        <div class="module-tile"><i class="fa-solid fa-truck" style="color:var(--green-glow);"></i><div class="m-title">SUPPLIERS</div><div class="m-val">36 Total</div><div style="font-size:0.5rem; color:var(--green-glow);">Active</div></div>
-        <div class="module-tile"><i class="fa-solid fa-diagram-project" style="color:var(--cyan-glow);"></i><div class="m-title">PROJECTS</div><div class="m-val">15 Active</div><div style="font-size:0.5rem; color:var(--green-glow);">On Track</div></div>
-      </div>
+                <!-- Donut Module Chart -->
+                <div class="lg:col-span-3 bg-slate-950/80 p-4 rounded-xl border border-slate-800 space-y-3">
+                    <div class="flex justify-between items-center text-xs font-digital">
+                        <span class="text-white font-bold">REVENUE BY MODULE</span>
+                        <i class="fa-solid fa-plus text-slate-500"></i>
+                    </div>
+                    <div class="h-44 relative flex items-center justify-center">
+                        <canvas id="moduleChart"></canvas>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2 text-[10px] pt-2 border-t border-slate-800/80">
+                        <div class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-cyan-400"></span> Sales (40%)</div>
+                        <div class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-purple-500"></span> Services (25%)</div>
+                        <div class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-pink-500"></span> Products (20%)</div>
+                        <div class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-amber-400"></span> Projects (15%)</div>
+                    </div>
+                </div>
 
-      <!-- TOP DEBTORS TABLE -->
-      <div class="card debtors-card">
-        <div class="card-header">TOP DEBTORS <a href="#" style="color:var(--cyan-glow); text-decoration:none;">VIEW ALL</a></div>
-        <table>
-          <thead>
-            <tr><th>CUSTOMER</th><th>AMOUNT</th><th>DUE DATE</th><th>DAYS OVERDUE</th><th>STATUS</th></tr>
-          </thead>
-          <tbody>
-            <tr><td>John David</td><td class="led-digit led-red">$5,250.00</td><td>20 MAY 2024</td><td>15</td><td><span class="status-badge status-overdue">OVERDUE</span></td></tr>
-            <tr><td>Sarah Lee</td><td class="led-digit led-red">$3,140.00</td><td>18 MAY 2024</td><td>17</td><td><span class="status-badge status-overdue">OVERDUE</span></td></tr>
-            <tr><td>Michael Brown</td><td class="led-digit led-red">$2,850.00</td><td>25 MAY 2024</td><td>10</td><td><span class="status-badge status-overdue">OVERDUE</span></td></tr>
-            <tr><td>David Wilson</td><td class="led-digit led-orange">$1,950.00</td><td>28 MAY 2024</td><td>7</td><td><span class="status-badge status-due">DUE SOON</span></td></tr>
-            <tr><td>Emily Johnson</td><td class="led-digit led-orange">$1,420.00</td><td>30 MAY 2024</td><td>5</td><td><span class="status-badge status-due">DUE SOON</span></td></tr>
-          </tbody>
-        </table>
-      </div>
+                <!-- 3D AI CEO COMMAND CENTER WITH THREE.JS CANVAS -->
+                <div class="lg:col-span-4 bg-slate-950/80 p-4 rounded-xl border glow-card-cyan space-y-3 flex flex-col justify-between relative overflow-hidden">
+                    <div class="flex justify-between items-center text-xs font-digital">
+                        <span class="text-cyan-400 font-bold flex items-center gap-2">
+                            <i class="fa-solid fa-brain"></i> AI CEO COMMAND CENTER
+                        </span>
+                        <span class="text-[10px] text-emerald-400 flex items-center gap-1 font-bold">
+                            <span class="w-2 h-2 rounded-full bg-emerald-500 live-dot"></span> ONLINE
+                        </span>
+                    </div>
 
-      <!-- ================= 6. HEALTH & PREDICTIONS ================= -->
-      <!-- CASH FLOW -->
-      <div class="card cashflow-card">
-        <div class="card-header">CASH FLOW <span>THIS MONTH</span> <i class="fa-solid fa-expand"></i></div>
-        <div class="led-digit led-green" style="font-size: 1.3rem; font-weight: bold;">$28,650.00</div>
-        <canvas id="cashflowChart" height="60" style="margin-top: 8px;"></canvas>
-      </div>
+                    <!-- 3D Wireframe Canvas Container -->
+                    <div id="canvas-container" class="w-full h-36 bg-slate-900/50 rounded-lg flex items-center justify-center relative overflow-hidden border border-cyan-500/20">
+                        <canvas id="three-ai-canvas" class="w-full h-full"></canvas>
+                        <div class="absolute bottom-2 left-2 right-2 bg-slate-950/80 border border-cyan-500/30 p-2 rounded text-[11px] text-cyan-200">
+                            "Good evening, Commander! I've analyzed your business data and have crucial insights."
+                        </div>
+                    </div>
 
-      <!-- BUSINESS HEALTH SCORE -->
-      <div class="card health-card">
-        <div class="card-header">BUSINESS HEALTH SCORE</div>
-        <div class="gauge-wrapper">
-          <canvas id="healthGauge" width="85" height="85"></canvas>
-          <div class="gauge-center">
-            <div class="gauge-percent">92%</div>
-            <div class="gauge-label">EXCELLENT</div>
-          </div>
-        </div>
-        <div class="health-bars">
-          <div class="health-row"><span>Sales Performance</span><span>94%</span></div>
-          <div class="progress-bg"><div class="progress-fill" style="width: 94%;"></div></div>
-          <div class="health-row"><span>Profit Margin</span><span>89%</span></div>
-          <div class="progress-bg"><div class="progress-fill" style="width: 89%;"></div></div>
-          <div class="health-row"><span>Cash Flow</span><span>92%</span></div>
-          <div class="progress-bg"><div class="progress-fill" style="width: 92%;"></div></div>
-          <div class="health-row"><span>Customer Satisfaction</span><span>91%</span></div>
-          <div class="progress-bg"><div class="progress-fill" style="width: 91%;"></div></div>
-          <div class="health-row"><span>Inventory Health</span><span>88%</span></div>
-          <div class="progress-bg"><div class="progress-fill" style="width: 88%;"></div></div>
-        </div>
-      </div>
+                    <div class="space-y-2">
+                        <button class="w-full py-2 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white rounded-lg text-xs font-bold font-digital shadow-[0_0_15px_rgba(0,243,255,0.4)] transition-all flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-microphone"></i> ASK AI CEO ANYTHING
+                        </button>
+                        <div class="grid grid-cols-2 gap-1 text-[9px] text-slate-300">
+                            <button class="bg-slate-900 border border-slate-800 p-1 rounded hover:border-cyan-500 text-left truncate">🔍 Why are sales down?</button>
+                            <button class="bg-slate-900 border border-slate-800 p-1 rounded hover:border-cyan-500 text-left truncate">🔍 Who owes me money?</button>
+                        </div>
+                    </div>
+                </div>
 
-      <!-- AI PREDICTION -->
-      <div class="card prediction-card">
-        <div class="card-header">AI PREDICTION <span>NEXT MONTH (PREDICTED)</span> <i class="fa-solid fa-expand"></i></div>
-        <div class="led-digit led-cyan" style="font-size: 1.3rem; font-weight: bold;">$136,700.00</div>
-        <canvas id="predictionChart" height="60" style="margin-top: 8px;"></canvas>
-      </div>
+            </div>
 
-      <!-- INVENTORY ALERTS -->
-      <div class="card alerts-card">
-        <div class="card-header">INVENTORY ALERTS</div>
-        <div style="font-size:0.65rem;">
-          <div class="activity-item"><span><i class="fa-solid fa-box" style="color:var(--red-glow);"></i> Samsung Charger</span><span>Stock: 2 <span style="color:var(--red-glow);">Reorder</span></span></div>
-          <div class="activity-item"><span><i class="fa-solid fa-box" style="color:var(--red-glow);"></i> HP Laptop 14"</span><span>Stock: 3 <span style="color:var(--red-glow);">Reorder</span></span></div>
-          <div class="activity-item"><span><i class="fa-solid fa-box" style="color:var(--red-glow);"></i> iPhone 15 Pro Case</span><span>Stock: 4 <span style="color:var(--red-glow);">Reorder</span></span></div>
-          <div class="activity-item"><span><i class="fa-solid fa-box" style="color:var(--red-glow);"></i> Oraimo Power Bank</span><span>Stock: 1 <span style="color:var(--red-glow);">Reorder</span></span></div>
-          <div class="activity-item"><span><i class="fa-solid fa-box" style="color:var(--red-glow);"></i> Logitech Mouse</span><span>Stock: 3 <span style="color:var(--red-glow);">Reorder</span></span></div>
-        </div>
-      </div>
+            <!-- LOWER GRID SECTION -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
 
-      <!-- UPCOMING REMINDERS -->
-      <div class="card reminders-card">
-        <div class="card-header">UPCOMING REMINDERS <a href="#" style="color:var(--cyan-glow); text-decoration:none;">VIEW ALL ></a></div>
-        <div style="font-size:0.63rem;">
-          <div class="activity-item"><span><i class="fa-regular fa-bell" style="color:var(--cyan-glow);"></i> Payment from ABC Corp</span><span style="color:var(--green-glow);">TODAY, 10:00 AM</span></div>
-          <div class="activity-item"><span><i class="fa-regular fa-calendar" style="color:var(--orange-glow);"></i> Team Meeting</span><span style="color:var(--green-glow);">TODAY, 02:00 PM</span></div>
-          <div class="activity-item"><span><i class="fa-solid fa-money-bill" style="color:var(--green-glow);"></i> Salary Payment</span><span style="color:var(--orange-glow);">TOMORROW, 09:00 AM</span></div>
-          <div class="activity-item"><span><i class="fa-solid fa-boxes-stacked" style="color:var(--red-glow);"></i> Stock Reorder</span><span style="color:var(--red-glow);">24 MAY, 09:00 AM</span></div>
-          <div class="activity-item"><span><i class="fa-regular fa-user" style="color:var(--purple-glow);"></i> Client Follow Up</span><span style="color:var(--red-glow);">25 MAY, 11:00 AM</span></div>
-        </div>
-      </div>
+                <!-- Quick Access Modules (10 Tiles Grid) -->
+                <div class="lg:col-span-7 bg-slate-950/80 p-4 rounded-xl border border-slate-800 space-y-3">
+                    <div class="flex justify-between items-center text-xs font-digital text-white font-bold">
+                        <span>QUICK ACCESS MODULES</span>
+                        <i class="fa-solid fa-border-all text-slate-500"></i>
+                    </div>
 
-      <!-- ================= 7. BOTTOM METRICS & SYSTEM STATUS ================= -->
-      <!-- RECENT ACTIVITIES -->
-      <div class="card activity-card">
-        <div class="card-header">RECENT ACTIVITIES</div>
-        <div style="font-size:0.63rem;">
-          <div class="activity-item"><span><i class="fa-solid fa-file-invoice" style="color:var(--cyan-glow);"></i> Invoice #INV-2048 Paid</span><span style="color:var(--text-dim);">2 min ago</span></div>
-          <div class="activity-item"><span><i class="fa-solid fa-cart-shopping" style="color:var(--green-glow);"></i> New Sale Recorded</span><span style="color:var(--green-glow); font-weight:bold;">$650.00</span></div>
-          <div class="activity-item"><span><i class="fa-solid fa-user-plus" style="color:var(--cyan-glow);"></i> Customer John David Added</span></div>
-          <div class="activity-item"><span><i class="fa-solid fa-hand-holding-dollar" style="color:var(--purple-glow);"></i> Payment from Sarah Lee</span><span style="color:var(--green-glow); font-weight:bold;">$3,140.00</span></div>
-          <div class="activity-item"><span><i class="fa-solid fa-box" style="color:var(--orange-glow);"></i> Stock Updated for iPhone 15</span><span style="color:var(--text-dim);">20 min ago</span></div>
-        </div>
-      </div>
+                    <div class="grid grid-cols-2 sm:grid-cols-5 gap-3">
+                        <div class="bg-slate-900/60 border border-cyan-500/30 p-2.5 rounded-lg text-center space-y-1 hover:border-cyan-400 transition-all cursor-pointer">
+                            <i class="fa-solid fa-chart-line text-cyan-400 text-base"></i>
+                            <div class="text-[10px] text-slate-400">SALES</div>
+                            <div class="text-xs font-bold font-digital text-white">$9,850.00</div>
+                        </div>
+                        <div class="bg-slate-900/60 border border-amber-500/30 p-2.5 rounded-lg text-center space-y-1 hover:border-amber-400 transition-all cursor-pointer">
+                            <i class="fa-solid fa-boxes-stacked text-amber-400 text-base"></i>
+                            <div class="text-[10px] text-slate-400">INVENTORY</div>
+                            <div class="text-xs font-bold font-digital text-white">2,450 Items</div>
+                        </div>
+                        <div class="bg-slate-900/60 border border-red-500/30 p-2.5 rounded-lg text-center space-y-1 hover:border-red-400 transition-all cursor-pointer">
+                            <i class="fa-solid fa-hand-holding-dollar text-red-400 text-base"></i>
+                            <div class="text-[10px] text-slate-400">DEBTORS</div>
+                            <div class="text-xs font-bold font-digital text-white">$24,650</div>
+                        </div>
+                        <div class="bg-slate-900/60 border border-emerald-500/30 p-2.5 rounded-lg text-center space-y-1 hover:border-emerald-400 transition-all cursor-pointer">
+                            <i class="fa-solid fa-users text-emerald-400 text-base"></i>
+                            <div class="text-[10px] text-slate-400">CUSTOMERS</div>
+                            <div class="text-xs font-bold font-digital text-white">2,847</div>
+                        </div>
+                        <div class="bg-slate-900/60 border border-orange-500/30 p-2.5 rounded-lg text-center space-y-1 hover:border-orange-400 transition-all cursor-pointer">
+                            <i class="fa-solid fa-file-invoice text-orange-400 text-base"></i>
+                            <div class="text-[10px] text-slate-400">INVOICES</div>
+                            <div class="text-xs font-bold font-digital text-white">18 Unpaid</div>
+                        </div>
+                    </div>
+                </div>
 
-      <!-- SALES TODAY -->
-      <div class="card bottom-stat">
-        <div class="card-header">SALES TODAY</div>
-        <div class="led-digit led-cyan" style="font-size: 1.1rem; font-weight: bold;">$9,850.00</div>
-        <div style="font-size: 0.6rem; color: var(--text-dim); margin-top:2px;">Transactions: <span style="color:#fff; font-weight:bold;">48</span></div>
-        <canvas id="sparklineSales" height="30" style="margin-top:4px;"></canvas>
-      </div>
+                <!-- Top Debtors Table View -->
+                <div class="lg:col-span-5 bg-slate-950/80 p-4 rounded-xl border border-slate-800 space-y-3">
+                    <div class="flex justify-between items-center text-xs font-digital text-white font-bold">
+                        <span>TOP DEBTORS</span>
+                        <button class="text-[10px] text-cyan-400 hover:underline">VIEW ALL</button>
+                    </div>
 
-      <!-- PROFIT TODAY -->
-      <div class="card bottom-stat">
-        <div class="card-header">PROFIT TODAY</div>
-        <div class="led-digit led-green" style="font-size: 1.1rem; font-weight: bold;">$3,240.00</div>
-        <div style="font-size: 0.6rem; color: var(--text-dim); margin-top:2px;">Margin: <span style="color:var(--green-glow); font-weight:bold;">32.9%</span></div>
-        <canvas id="sparklineProfit" height="30" style="margin-top:4px;"></canvas>
-      </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs">
+                            <thead class="text-[10px] text-slate-500 border-b border-slate-800 uppercase">
+                                <tr>
+                                    <th class="pb-2">Customer</th>
+                                    <th class="pb-2">Amount</th>
+                                    <th class="pb-2">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-800/50">
+                                <tr>
+                                    <td class="py-2 text-white font-semibold">John David</td>
+                                    <td class="py-2 font-digital text-red-400">$5,250.00</td>
+                                    <td class="py-2"><span class="bg-red-500/20 text-red-400 border border-red-500/40 text-[9px] px-2 py-0.5 rounded font-digital">OVERDUE</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="py-2 text-white font-semibold">Sarah Lee</td>
+                                    <td class="py-2 font-digital text-red-400">$3,140.00</td>
+                                    <td class="py-2"><span class="bg-red-500/20 text-red-400 border border-red-500/40 text-[9px] px-2 py-0.5 rounded font-digital">OVERDUE</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="py-2 text-white font-semibold">David Wilson</td>
+                                    <td class="py-2 font-digital text-amber-400">$1,950.00</td>
+                                    <td class="py-2"><span class="bg-amber-500/20 text-amber-400 border border-amber-500/40 text-[9px] px-2 py-0.5 rounded font-digital">DUE SOON</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
 
-      <!-- EXPENSES TODAY -->
-      <div class="card bottom-stat">
-        <div class="card-header">EXPENSES TODAY</div>
-        <div class="led-digit led-red" style="font-size: 1.1rem; font-weight: bold;">$1,210.00</div>
-        <div style="font-size: 0.6rem; color: var(--text-dim); margin-top:2px;">Transactions: <span style="color:#fff; font-weight:bold;">12</span></div>
-        <canvas id="sparklineExpenses" height="30" style="margin-top:4px;"></canvas>
-      </div>
+            </div>
 
-      <!-- ORDERS TODAY -->
-      <div class="card bottom-stat">
-        <div class="card-header">ORDERS TODAY</div>
-        <div class="led-digit led-orange" style="font-size: 1.3rem; font-weight: bold;">48</div>
-        <div style="font-size: 0.6rem; color: var(--text-dim); margin-top:2px;">Completed: <span style="color:var(--orange-glow); font-weight:bold;">36</span></div>
-        <canvas id="sparklineOrders" height="30" style="margin-top:4px;"></canvas>
-      </div>
+            <!-- BOTTOM FOOTER SYSTEM STATUS & METRICS -->
+            <div class="bg-slate-950/80 border border-slate-800 rounded-xl p-4 flex flex-col md:flex-row justify-between items-center gap-4 text-xs">
+                <div class="flex items-center gap-6 flex-wrap">
+                    <span class="font-bold font-digital text-white">SYSTEM STATUS:</span>
+                    <span class="flex items-center gap-1.5 text-slate-300"><span class="w-2 h-2 rounded-full bg-emerald-500 live-dot"></span> Database: <strong class="text-emerald-400">Online</strong></span>
+                    <span class="flex items-center gap-1.5 text-slate-300"><span class="w-2 h-2 rounded-full bg-emerald-500 live-dot"></span> API Server: <strong class="text-emerald-400">Online</strong></span>
+                    <span class="flex items-center gap-1.5 text-slate-300"><span class="w-2 h-2 rounded-full bg-emerald-500 live-dot"></span> AI Engine: <strong class="text-emerald-400">Ready</strong></span>
+                </div>
+                <div class="text-slate-500 font-digital text-[10px]">
+                    LIVE CONNECTED TO SPREADSHEET ENGINE
+                </div>
+            </div>
 
-      <!-- NEW CUSTOMERS -->
-      <div class="card bottom-stat">
-        <div class="card-header">NEW CUSTOMERS</div>
-        <div class="led-digit led-purple" style="font-size: 1.3rem; font-weight: bold;">12</div>
-        <div style="font-size: 0.6rem; color: var(--text-dim); margin-top:2px;">This Month</div>
-        <canvas id="sparklineCustomers" height="30" style="margin-top:4px;"></canvas>
-      </div>
-
-      <!-- SYSTEM STATUS MONITOR -->
-      <div class="card status-card">
-        <div class="card-header">SYSTEM STATUS</div>
-        <div class="status-row"><span><span class="status-dot dot-online"></span> Database</span><span style="color:var(--green-glow);">Online</span></div>
-        <div class="status-row"><span><span class="status-dot dot-online"></span> API Server</span><span style="color:var(--green-glow);">Online</span></div>
-        <div class="status-row"><span><span class="status-dot dot-online"></span> AI Services</span><span style="color:var(--green-glow);">Online</span></div>
-        <div class="status-row"><span><span class="status-dot dot-online"></span> WhatsApp API</span><span style="color:var(--green-glow);">Connected</span></div>
-        <div class="status-row"><span><span class="status-dot dot-online"></span> Email Service</span><span style="color:var(--green-glow);">Connected</span></div>
-        <div class="status-row"><span><span class="status-dot dot-online"></span> Backup System</span><span style="color:var(--green-glow);">Active</span></div>
-        <div class="status-row"><span><span class="status-dot dot-online"></span> Payment Gateway</span><span style="color:var(--green-glow);">Connected</span></div>
-      </div>
-
+        </main>
     </div>
-  </main>
 
-</div>
+    <!-- DASHBOARD LOGIC & THREE.JS ENGINE -->
+    <script>
+        // 1. REAL-TIME CLOCK UPDATER
+        function updateClock() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString('en-US', { hour12: true });
+            const dayString = now.toLocaleDateString('en-US', { weekday: 'long' }).toUpperCase();
+            const dateString = now.toLocaleDateString('en-US', { day: '2-digit', month: 'SHORT', year: 'NUMERIC' }).toUpperCase();
 
-<!-- ================= JAVASCRIPT: REAL-TIME CLOCK & CHARTS ================= -->
-<script>
-  // --- REAL-TIME TICKING DIGITAL CLOCK ---
-  function runLiveClock() {
-    const now = new Date();
-    let hours = now.getHours();
-    const minutes = String(now.getMinutes()).padStart(2, '0');
-    const seconds = String(now.getSeconds()).padStart(2, '0');
-    const ampm = hours >= 12 ? 'PM' : 'AM';
-    hours = hours % 12;
-    hours = hours ? hours : 12; // convert 0 to 12
-    const hoursStr = String(hours).padStart(2, '0');
+            document.getElementById('live-time').innerText = timeString;
+            document.getElementById('live-day').innerText = dayString;
+            document.getElementById('live-date').innerText = dateString;
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
 
-    const timeString = `${hoursStr}:${minutes}:${seconds} ${ampm}`;
-    const days = ['SUNDAY','MONDAY','TUESDAY','WEDNESDAY','THURSDAY','FRIDAY','SATURDAY'];
-    const months = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
-    
-    const dateString = `${days[now.getDay()]} ${now.getDate()} ${months[now.getMonth()]} ${now.getFullYear()}`;
+        // 2. CHART.JS VISUALIZATIONS
+        // Overview Line Chart
+        const ctx1 = document.getElementById('overviewChart').getContext('2d');
+        new Chart(ctx1, {
+            type: 'line',
+            data: {
+                labels: ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'],
+                datasets: [
+                    { label: 'Revenue', data: [45, 52, 58, 65, 72, 68, 80, 85, 90, 95, 100, 125], borderColor: '#00f3ff', tension: 0.4, borderWidth: 2 },
+                    { label: 'Profit', data: [20, 25, 28, 30, 35, 32, 40, 42, 48, 50, 55, 62], borderColor: '#00ff66', tension: 0.4, borderWidth: 2 },
+                    { label: 'Expenses', data: [15, 18, 20, 22, 25, 24, 28, 30, 32, 35, 38, 40], borderColor: '#ff2a5f', tension: 0.4, borderWidth: 2 }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: {
+                    x: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#64748b', font: { size: 9 } } },
+                    y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#64748b', font: { size: 9 } } }
+                }
+            }
+        });
 
-    document.getElementById('liveClock').innerText = timeString;
-    document.getElementById('liveDate').innerText = dateString;
-  }
-  setInterval(runLiveClock, 1000);
-  runLiveClock();
+        // Donut Module Chart
+        const ctx2 = document.getElementById('moduleChart').getContext('2d');
+        new Chart(ctx2, {
+            type: 'doughnut',
+            data: {
+                labels: ['Sales', 'Services', 'Products', 'Projects'],
+                datasets: [{
+                    data: [40, 25, 20, 15],
+                    backgroundColor: ['#00f3ff', '#b026ff', '#ec4899', '#ffb700'],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                cutout: '70%'
+            }
+        });
 
-  // --- CHART 1: BUSINESS OVERVIEW (MULTI-LINE) ---
-  const ctxOverview = document.getElementById('overviewChart').getContext('2d');
-  new Chart(ctxOverview, {
-    type: 'line',
-    data: {
-      labels: ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'],
-      datasets: [
-        { label: 'REVENUE', data: [30, 42, 55, 60, 75, 65, 80, 85, 90, 100, 110, 125], borderColor: '#00f0ff', borderWidth: 2, tension: 0.4, pointRadius: 0 },
-        { label: 'PROFIT', data: [12, 18, 25, 28, 35, 30, 40, 42, 45, 52, 58, 65], borderColor: '#00ff66', borderWidth: 2, tension: 0.4, pointRadius: 0 },
-        { label: 'EXPENSES', data: [18, 24, 30, 32, 40, 35, 40, 43, 45, 48, 52, 60], borderColor: '#ff0055', borderWidth: 2, tension: 0.4, pointRadius: 0 }
-      ]
-    },
-    options: {
-      responsive: true,
-      plugins: { legend: { display: false } },
-      scales: {
-        x: { grid: { color: 'rgba(255,255,255,0.03)' }, ticks: { color: '#64748b', font: { size: 9 } } },
-        y: { grid: { color: 'rgba(255,255,255,0.03)' }, ticks: { color: '#64748b', font: { size: 9 } } }
-      }
-    }
-  });
+        // 3. THREE.JS 3D ANIMATED AI WIREFRAME HEAD
+        const container = document.getElementById('canvas-container');
+        const canvas = document.getElementById('three-ai-canvas');
+        
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(50, container.clientWidth / container.clientHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
+        renderer.setSize(container.clientWidth, container.clientHeight);
 
-  // --- CHART 2: REVENUE BY MODULE (DONUT) ---
-  const ctxModule = document.getElementById('moduleChart').getContext('2d');
-  new Chart(ctxModule, {
-    type: 'doughnut',
-    data: {
-      datasets: [{
-        data: [40, 25, 20, 15],
-        backgroundColor: ['#00f0ff', '#00ff66', '#ff9900', '#bc13fe'],
-        borderWidth: 0
-      }]
-    },
-    options: { plugins: { legend: { display: false } }, cutout: '78%' }
-  });
+        // 3D Wireframe Icosahedron Head Model Representation
+        const geometry = new THREE.IcosahedronGeometry(1.8, 2);
+        const material = new THREE.MeshBasicMaterial({ color: 0x00f3ff, wireframe: true, transparent: true, opacity: 0.8 });
+        const sphere = new THREE.Mesh(geometry, material);
+        scene.add(sphere);
 
-  // --- CHART 3: CASH FLOW HISTOGRAM ---
-  const ctxCashflow = document.getElementById('cashflowChart').getContext('2d');
-  new Chart(ctxCashflow, {
-    type: 'bar',
-    data: {
-      labels: ['1','2','3','4','5','6','7','8','9','10'],
-      datasets: [{ data: [12, 18, 14, 22, 28, 24, 32, 28, 35, 40], backgroundColor: '#00ff66', borderRadius: 2 }]
-    },
-    options: { plugins: { legend: { display: false } }, scales: { x: { display: false }, y: { display: false } } }
-  });
+        camera.position.z = 4.5;
 
-  // --- CHART 4: HEALTH SCORE RADIAL GAUGE ---
-  const ctxGauge = document.getElementById('healthGauge').getContext('2d');
-  new Chart(ctxGauge, {
-    type: 'doughnut',
-    data: {
-      datasets: [{ data: [92, 8], backgroundColor: ['#00ff66', 'rgba(255,255,255,0.05)'], borderWidth: 0 }]
-    },
-    options: { plugins: { legend: { display: false } }, cutout: '82%', rotation: -90, circumference: 360 }
-  });
+        // Render Loop for Animation
+        function animateAI() {
+            requestAnimationFrame(animateAI);
+            sphere.rotation.y += 0.01;
+            sphere.rotation.x += 0.005;
+            renderer.render(scene, camera);
+        }
+        animateAI();
 
-  // --- CHART 5: AI PREDICTION LINE ---
-  const ctxPred = document.getElementById('predictionChart').getContext('2d');
-  new Chart(ctxPred, {
-    type: 'line',
-    data: {
-      labels: ['W1','W2','W3','W4'],
-      datasets: [{ data: [110, 118, 126, 136.7], borderColor: '#00f0ff', borderWidth: 2, tension: 0.3, pointRadius: 0 }]
-    },
-    options: { plugins: { legend: { display: false } }, scales: { x: { display: false }, y: { display: false } } }
-  });
+        // 4. LIVE GOOGLE APPS SCRIPT SHEET FETCHING (Pre-wired)
+        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzVMhcd0iINvnGEJbRyuxG1CwKMFVs7UvHj_eHpWTf9L_WxOVXdyxFKe0Ws9bv8pbKY/exec";
 
-  // --- SPARKLINE HELPERS ---
-  function createSparkline(id, color, data) {
-    const ctx = document.getElementById(id).getContext('2d');
-    new Chart(ctx, {
-      type: 'line',
-      data: { labels: data.map((_, i) => i), datasets: [{ data: data, borderColor: color, borderWidth: 1.5, tension: 0.3, pointRadius: 0 }] },
-      options: { plugins: { legend: { display: false } }, scales: { x: { display: false }, y: { display: false } } }
-    });
-  }
-
-  createSparkline('sparklineSales', '#00f0ff', [10, 22, 18, 35, 28, 48]);
-  createSparkline('sparklineProfit', '#00ff66', [5, 12, 15, 20, 28, 32.9]);
-  createSparkline('sparklineExpenses', '#ff0055', [15, 10, 18, 12, 14, 12]);
-  createSparkline('sparklineOrders', '#ff9900', [12, 20, 25, 30, 40, 48]);
-  createSparkline('sparklineCustomers', '#bc13fe', [2, 4, 6, 8, 10, 12]);
-</script>
-
+        async function fetchSheetData() {
+            try {
+                const response = await fetch(GOOGLE_SCRIPT_URL);
+                if (response.ok) {
+                    const data = await response.json();
+                    if(data.revenue) document.getElementById('metric-revenue').innerText = data.revenue;
+                    if(data.profit) document.getElementById('metric-profit').innerText = data.profit;
+                    if(data.sales) document.getElementById('metric-sales').innerText = data.sales;
+                    if(data.debts) document.getElementById('metric-debts').innerText = data.debts;
+                    if(data.cash) document.getElementById('metric-cash').innerText = data.cash;
+                }
+            } catch (err) {
+                console.log("Sheet fetch standing by or CORS initialized standard view.");
+            }
+        }
+        fetchSheetData();
+    </script>
 </body>
 </html>
