@@ -6,146 +6,246 @@
     <title>Sales - Quantum OPS Elite</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         body { font-family: 'Rajdhani', sans-serif; background: #030610; color: #e2e8f0; }
-        .panel-glow { background: rgba(10,15,29,0.95); border: 1px solid rgba(0,240,255,0.2); backdrop-filter: blur(12px); }
+        .panel-glow { background: rgba(10,15,29,0.95); border: 1px solid rgba(0,240,255,0.2); }
         .neon-cyan { color: #00f0ff; text-shadow: 0 0 10px rgba(0,240,255,0.6); }
     </style>
 </head>
 <body class="min-h-screen p-6">
 
-    <div class="max-w-7xl mx-auto">
-        <div class="flex justify-between items-center mb-8">
-            <h1 class="text-3xl font-bold neon-cyan">SALES MODULE</h1>
-            <button onclick="window.location.href='dashboard.html'" class="px-6 py-2 bg-slate-800 hover:bg-slate-700 rounded-xl flex items-center gap-2">
-                <i class="fa-solid fa-arrow-left"></i> Back to Dashboard
-            </button>
-        </div>
-
-        <!-- Summary Cards -->
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-            <div class="panel-glow p-6 rounded-2xl">
-                <p class="text-sm text-slate-400">TOTAL SALES TODAY</p>
-                <p class="text-4xl font-digital font-bold text-emerald-400" id="todaySales">$9,850</p>
-            </div>
-            <div class="panel-glow p-6 rounded-2xl">
-                <p class="text-sm text-slate-400">THIS MONTH</p>
-                <p class="text-4xl font-digital font-bold text-cyan-400" id="monthSales">$99,850</p>
-            </div>
-            <div class="panel-glow p-6 rounded-2xl">
-                <p class="text-sm text-slate-400">AVERAGE SALE</p>
-                <p class="text-4xl font-digital font-bold text-amber-400" id="avgSale">$2,080</p>
-            </div>
-            <div class="panel-glow p-6 rounded-2xl">
-                <p class="text-sm text-slate-400">TRANSACTIONS</p>
-                <p class="text-4xl font-digital font-bold text-purple-400" id="transactions">48</p>
-            </div>
-        </div>
-
-        <!-- New Sale Button -->
-        <button onclick="showNewSaleModal()" class="mb-6 px-8 py-3 bg-cyan-600 hover:bg-cyan-500 rounded-2xl font-bold flex items-center gap-3 text-lg">
-            <i class="fa-solid fa-plus"></i> NEW SALE
+<div class="max-w-6xl mx-auto">
+    <div class="flex justify-between items-center mb-8">
+        <h1 class="text-3xl font-bold neon-cyan">SALES MODULE</h1>
+        <button onclick="window.location.href='dashboard.html'" class="px-6 py-2 bg-slate-800 hover:bg-slate-700 rounded-xl">
+            <i class="fa-solid fa-arrow-left"></i> Back to Dashboard
         </button>
+    </div>
 
-        <!-- Sales Table -->
-        <div class="panel-glow rounded-2xl overflow-hidden">
-            <table class="w-full">
-                <thead class="bg-slate-900">
-                    <tr>
-                        <th class="p-4 text-left">DATE</th>
-                        <th class="p-4 text-left">CUSTOMER</th>
-                        <th class="p-4 text-left">ITEM</th>
-                        <th class="p-4 text-right">AMOUNT</th>
-                        <th class="p-4 text-center">STATUS</th>
-                    </tr>
-                </thead>
-                <tbody id="salesTable" class="divide-y divide-slate-800"></tbody>
-            </table>
+    <!-- Summary -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+        <div class="panel-glow p-5 rounded-2xl">
+            <p class="text-sm text-slate-400">TODAY</p>
+            <p class="text-3xl font-bold text-emerald-400" id="todaySales">$0</p>
+        </div>
+        <div class="panel-glow p-5 rounded-2xl">
+            <p class="text-sm text-slate-400">THIS MONTH</p>
+            <p class="text-3xl font-bold text-cyan-400" id="monthSales">$0</p>
+        </div>
+        <div class="panel-glow p-5 rounded-2xl">
+            <p class="text-sm text-slate-400">TRANSACTIONS</p>
+            <p class="text-3xl font-bold text-purple-400" id="txCount">0</p>
+        </div>
+        <div class="panel-glow p-5 rounded-2xl">
+            <p class="text-sm text-slate-400">AVERAGE</p>
+            <p class="text-3xl font-bold text-amber-400" id="avgSale">$0</p>
         </div>
     </div>
 
-    <!-- New Sale Modal -->
-    <div id="newSaleModal" class="hidden fixed inset-0 bg-black/80 flex items-center justify-center z-50">
-        <div class="bg-[#050814] border border-cyan-500 rounded-3xl p-8 w-full max-w-md">
-            <h2 class="text-2xl font-bold mb-6 text-cyan-400">New Sale</h2>
-            <input id="saleCustomer" placeholder="Customer Name" class="w-full mb-4 p-4 bg-slate-900 rounded-2xl">
-            <input id="saleItem" placeholder="Item / Service" class="w-full mb-4 p-4 bg-slate-900 rounded-2xl">
-            <input id="saleAmount" type="number" placeholder="Amount" class="w-full mb-6 p-4 bg-slate-900 rounded-2xl">
-            <div class="flex gap-4">
-                <button onclick="hideNewSaleModal()" class="flex-1 py-4 bg-slate-800 rounded-2xl">Cancel</button>
-                <button onclick="saveNewSale()" class="flex-1 py-4 bg-emerald-600 rounded-2xl font-bold">Save Sale</button>
+    <button onclick="openNewSale()" class="mb-6 px-8 py-3 bg-cyan-600 hover:bg-cyan-500 rounded-2xl font-bold text-lg">
+        <i class="fa-solid fa-plus"></i> NEW SALE
+    </button>
+
+    <!-- Sales Table -->
+    <div class="panel-glow rounded-2xl overflow-hidden">
+        <table class="w-full">
+            <thead class="bg-slate-900 text-left">
+                <tr>
+                    <th class="p-4">DATE</th>
+                    <th class="p-4">CUSTOMER</th>
+                    <th class="p-4">ITEMS</th>
+                    <th class="p-4 text-right">TOTAL</th>
+                    <th class="p-4 text-center">STATUS</th>
+                </tr>
+            </thead>
+            <tbody id="salesTable" class="divide-y divide-slate-800"></tbody>
+        </table>
+    </div>
+</div>
+
+<!-- ================= NEW SALE MODAL ================= -->
+<div id="newSaleModal" class="hidden fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4">
+    <div class="bg-[#050814] border border-cyan-500 rounded-3xl p-8 w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+        <h2 class="text-2xl font-bold mb-6 text-cyan-400">New Sale</h2>
+
+        <div class="grid grid-cols-2 gap-4 mb-4">
+            <div>
+                <label class="text-sm text-slate-400">Customer Name</label>
+                <input id="customerName" class="w-full p-3 bg-slate-900 rounded-xl mt-1" placeholder="John David">
+            </div>
+            <div>
+                <label class="text-sm text-slate-400">Date</label>
+                <input id="saleDate" type="date" class="w-full p-3 bg-slate-900 rounded-xl mt-1">
             </div>
         </div>
+
+        <!-- Line Items -->
+        <div class="mb-4">
+            <div class="flex justify-between items-center mb-2">
+                <label class="text-sm text-slate-400">Items</label>
+                <button onclick="addItemRow()" class="text-cyan-400 text-sm"><i class="fa-solid fa-plus"></i> Add Item</button>
+            </div>
+            <div id="itemsContainer" class="space-y-2"></div>
+        </div>
+
+        <!-- Total -->
+        <div class="flex justify-between items-center py-4 border-t border-slate-700 mb-6">
+            <span class="text-xl font-bold">TOTAL</span>
+            <span id="grandTotal" class="text-3xl font-bold text-emerald-400">$0.00</span>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4 mb-6">
+            <div>
+                <label class="text-sm text-slate-400">Payment Status</label>
+                <select id="paymentStatus" class="w-full p-3 bg-slate-900 rounded-xl mt-1">
+                    <option value="Paid">Paid</option>
+                    <option value="Partial">Partial</option>
+                    <option value="Unpaid">Unpaid</option>
+                </select>
+            </div>
+            <div>
+                <label class="text-sm text-slate-400">Payment Type</label>
+                <select id="paymentType" class="w-full p-3 bg-slate-900 rounded-xl mt-1">
+                    <option value="Cash">Cash</option>
+                    <option value="Transfer">Transfer</option>
+                    <option value="Card">Card</option>
+                    <option value="POS">POS</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="flex gap-4">
+            <button onclick="closeNewSale()" class="flex-1 py-4 bg-slate-800 rounded-2xl">Cancel</button>
+            <button onclick="saveSale()" class="flex-1 py-4 bg-emerald-600 rounded-2xl font-bold">Save Sale</button>
+        </div>
     </div>
+</div>
 
-    <script>
-        const API_URL = "https://script.google.com/macros/s/AKfycbzy5OVPf1zk4Quy_RvrictzgLVWFZ77E4VL1PnR7gcPexkffVCNoxsun0zceBMRBAxm/exec";
+<script>
+const API_URL = "https://script.google.com/macros/s/AKfycbzy5OVPf1zk4Quy_RvrictzgLVWFZ77E4VL1PnR7gcPexkffVCNoxsun0zceBMRBAxm/exec";
 
-        async function loadSales() {
-            try {
-                const res = await fetch(API_URL, {
-                    method: 'POST',
-                    body: JSON.stringify({ action: 'getSales' })
-                });
-                const data = await res.json();
-                renderSalesTable(data.data || []);
-            } catch(e) {
-                console.error(e);
-            }
+let itemCount = 0;
+
+function openNewSale() {
+    document.getElementById('newSaleModal').classList.remove('hidden');
+    document.getElementById('saleDate').valueAsDate = new Date();
+    document.getElementById('itemsContainer').innerHTML = '';
+    itemCount = 0;
+    addItemRow();
+    calculateTotal();
+}
+
+function closeNewSale() {
+    document.getElementById('newSaleModal').classList.add('hidden');
+}
+
+function addItemRow() {
+    itemCount++;
+    const div = document.createElement('div');
+    div.className = 'flex gap-2 items-center';
+    div.id = `item-row-${itemCount}`;
+    div.innerHTML = `
+        <input placeholder="Item name (e.g. Jeans)" class="flex-1 p-3 bg-slate-900 rounded-xl item-name">
+        <input type="number" placeholder="Qty" value="1" class="w-20 p-3 bg-slate-900 rounded-xl item-qty" oninput="calculateTotal()">
+        <input type="number" placeholder="Price" class="w-28 p-3 bg-slate-900 rounded-xl item-price" oninput="calculateTotal()">
+        <button onclick="this.parentElement.remove(); calculateTotal()" class="text-red-400 px-2"><i class="fa-solid fa-trash"></i></button>
+    `;
+    document.getElementById('itemsContainer').appendChild(div);
+}
+
+function calculateTotal() {
+    let total = 0;
+    document.querySelectorAll('#itemsContainer > div').forEach(row => {
+        const qty = parseFloat(row.querySelector('.item-qty').value) || 0;
+        const price = parseFloat(row.querySelector('.item-price').value) || 0;
+        total += qty * price;
+    });
+    document.getElementById('grandTotal').textContent = '$' + total.toFixed(2);
+}
+
+async function saveSale() {
+    const customer = document.getElementById('customerName').value.trim();
+    const date = document.getElementById('saleDate').value;
+    const status = document.getElementById('paymentStatus').value;
+    const type = document.getElementById('paymentType').value;
+
+    if (!customer) return alert("Enter customer name");
+
+    const items = [];
+    document.querySelectorAll('#itemsContainer > div').forEach(row => {
+        const name = row.querySelector('.item-name').value.trim();
+        const qty = parseFloat(row.querySelector('.item-qty').value) || 0;
+        const price = parseFloat(row.querySelector('.item-price').value) || 0;
+        if (name && qty > 0 && price > 0) {
+            items.push({ name, qty, price, total: qty * price });
         }
+    });
 
-        function renderSalesTable(sales) {
-            const tbody = document.getElementById('salesTable');
-            tbody.innerHTML = '';
-            sales.forEach(s => {
-                const tr = document.createElement('tr');
-                tr.innerHTML = `
-                    <td class="p-4">${s.date || 'Today'}</td>
-                    <td class="p-4">${s.customer}</td>
-                    <td class="p-4">${s.item}</td>
-                    <td class="p-4 text-right font-bold text-emerald-400">$${parseFloat(s.amount).toLocaleString()}</td>
-                    <td class="p-4 text-center"><span class="px-4 py-1 bg-emerald-900 text-emerald-400 rounded-full text-xs">PAID</span></td>
-                `;
-                tbody.appendChild(tr);
-            });
+    if (items.length === 0) return alert("Add at least one item");
+
+    const totalAmount = items.reduce((sum, i) => sum + i.total, 0);
+
+    try {
+        const res = await fetch(API_URL, {
+            method: 'POST',
+            body: JSON.stringify({
+                action: 'addSale',
+                customer: customer,
+                date: date,
+                items: items,
+                total_amount: totalAmount,
+                payment_status: status,
+                payment_type: type
+            })
+        });
+        const data = await res.json();
+        if (data.success) {
+            alert("Sale saved successfully!");
+            closeNewSale();
+            loadSales();
+        } else {
+            alert("Error: " + (data.message || "Could not save"));
         }
+    } catch (e) {
+        alert("Connection error");
+    }
+}
 
-        function showNewSaleModal() {
-            document.getElementById('newSaleModal').classList.remove('hidden');
-        }
+async function loadSales() {
+    try {
+        const res = await fetch(API_URL, {
+            method: 'POST',
+            body: JSON.stringify({ action: 'getSales' })
+        });
+        const data = await res.json();
+        const sales = data.data || [];
+        renderTable(sales);
+    } catch(e) {
+        console.error(e);
+    }
+}
 
-        function hideNewSaleModal() {
-            document.getElementById('newSaleModal').classList.add('hidden');
-        }
+function renderTable(sales) {
+    const tbody = document.getElementById('salesTable');
+    tbody.innerHTML = '';
+    sales.forEach(s => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+            <td class="p-4">${s.created_at || s.date || '-'}</td>
+            <td class="p-4">${s.customer || s.customer_id || '-'}</td>
+            <td class="p-4 text-sm text-slate-400">${s.items_summary || 'Multiple items'}</td>
+            <td class="p-4 text-right font-bold text-emerald-400">$${parseFloat(s.total_amount || 0).toLocaleString()}</td>
+            <td class="p-4 text-center">
+                <span class="px-3 py-1 rounded-full text-xs ${s.payment_status === 'Paid' ? 'bg-emerald-900 text-emerald-400' : 'bg-amber-900 text-amber-400'}">
+                    ${s.payment_status || 'Paid'}
+                </span>
+            </td>
+        `;
+        tbody.appendChild(tr);
+    });
+}
 
-        async function saveNewSale() {
-            const customer = document.getElementById('saleCustomer').value;
-            const item = document.getElementById('saleItem').value;
-            const amount = document.getElementById('saleAmount').value;
-
-            if (!customer || !item || !amount) return alert("Fill all fields");
-
-            try {
-                await fetch(API_URL, {
-                    method: 'POST',
-                    body: JSON.stringify({
-                        action: 'addSale',
-                        customer: customer,
-                        item: item,
-                        amount: amount
-                    })
-                });
-                alert("Sale saved successfully!");
-                hideNewSaleModal();
-                loadSales();
-            } catch(e) {
-                alert("Error saving sale");
-            }
-        }
-
-        // Load on start
-        window.onload = loadSales;
-    </script>
+window.onload = loadSales;
+</script>
 </body>
 </html>
