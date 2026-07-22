@@ -15,76 +15,100 @@
             font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
         }
         .glass-panel {
-            background: rgba(15, 23, 42, 0.75);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(59, 130, 246, 0.2);
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            background: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(59, 130, 246, 0.25);
+            box-shadow: 0 10px 40px 0 rgba(0, 0, 0, 0.5);
         }
-        .neon-glow {
-            box-shadow: 0 0 15px rgba(59, 130, 246, 0.4);
-        }
-        .neon-glow:focus {
-            box-shadow: 0 0 20px rgba(59, 130, 246, 0.6);
+        .neon-glow:focus-within, input:focus, select:focus {
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.5);
+            border-color: #3b82f6;
         }
     </style>
 </head>
-<div class="min-h-screen flex items-center justify-center p-4">
-    <div class="w-full max-w-lg glass-panel rounded-2xl p-8 relative overflow-hidden">
+<body class="min-h-screen flex items-center justify-center p-4">
+
+    <div class="w-full max-w-xl glass-panel rounded-2xl p-8 relative overflow-hidden my-8">
         
-        <!-- Header / Logo -->
+        <!-- Header / Branding -->
         <div class="text-center mb-8">
-            <div class="inline-flex items-center justify-center w-16 h-16 rounded-xl bg-blue-600/20 border border-blue-500/40 text-blue-400 mb-3 neon-glow">
+            <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-blue-600/20 border border-blue-500/40 text-blue-400 mb-3 shadow-lg shadow-blue-500/10">
                 <i class="fa-solid fa-crown text-2xl"></i>
             </div>
             <h1 class="text-2xl font-bold tracking-wider text-white">QUANTUM OPS <span class="text-blue-500">ELITE</span></h1>
-            <p class="text-xs text-gray-400 mt-1 uppercase tracking-widest">Create Enterprise Business Workspace</p>
+            <p class="text-xs text-gray-400 mt-1 uppercase tracking-widest">Enterprise Command Registration</p>
         </div>
 
-        <!-- Alert Message Container -->
+        <!-- Alert Notification Box -->
         <div id="alert-box" class="hidden mb-6 p-4 rounded-lg text-sm font-medium transition-all"></div>
 
-        <!-- Signup Form -->
-        <form id="signupForm" onsubmit="handleSignup(event)" class="space-y-5">
+        <!-- Registration Form -->
+        <form id="signupForm" onsubmit="handleSignup(event)" class="space-y-4">
             
             <!-- Full Name -->
             <div>
-                <label class="block text-xs font-semibold text-gray-300 uppercase tracking-wider mb-2">Full Name</label>
+                <label class="block text-xs font-semibold text-gray-300 uppercase tracking-wider mb-1.5">Full Name *</label>
                 <div class="relative">
                     <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
                         <i class="fa-solid fa-user"></i>
                     </span>
-                    <input type="text" id="fullName" required placeholder="Commander John Doe" 
-                        class="w-full pl-10 pr-4 py-3 bg-slate-900/80 border border-slate-700 rounded-lg focus:outline-none focus:border-blue-500 text-white placeholder-gray-500 text-sm neon-glow transition-all">
+                    <input type="text" id="fullName" required placeholder="Commander Alex Mercer" 
+                        class="w-full pl-10 pr-4 py-3 bg-slate-900/90 border border-slate-700 rounded-lg focus:outline-none text-white placeholder-gray-500 text-sm transition-all">
                 </div>
             </div>
 
             <!-- Email Address -->
             <div>
-                <label class="block text-xs font-semibold text-gray-300 uppercase tracking-wider mb-2">Work Email</label>
+                <label class="block text-xs font-semibold text-gray-300 uppercase tracking-wider mb-1.5">Work Email *</label>
                 <div class="relative">
                     <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
                         <i class="fa-solid fa-envelope"></i>
                     </span>
-                    <input type="email" id="email" required placeholder="commander@enterprise.com" 
-                        class="w-full pl-10 pr-4 py-3 bg-slate-900/80 border border-slate-700 rounded-lg focus:outline-none focus:border-blue-500 text-white placeholder-gray-500 text-sm neon-glow transition-all">
+                    <input type="email" id="email" required placeholder="alex@enterprise.com" 
+                        class="w-full pl-10 pr-4 py-3 bg-slate-900/90 border border-slate-700 rounded-lg focus:outline-none text-white placeholder-gray-500 text-sm transition-all">
                 </div>
             </div>
 
-            <!-- Company Name & Currency -->
+            <!-- Phone Number & Country -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-xs font-semibold text-gray-300 uppercase tracking-wider mb-1.5">Phone Number</label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
+                            <i class="fa-solid fa-phone"></i>
+                        </span>
+                        <input type="tel" id="phoneNumber" placeholder="+1 (555) 000-0000" 
+                            class="w-full pl-10 pr-4 py-3 bg-slate-900/90 border border-slate-700 rounded-lg focus:outline-none text-white placeholder-gray-500 text-sm transition-all">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-gray-300 uppercase tracking-wider mb-1.5">Country</label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
+                            <i class="fa-solid fa-globe"></i>
+                        </span>
+                        <input type="text" id="country" placeholder="United States / Nigeria" 
+                            class="w-full pl-10 pr-4 py-3 bg-slate-900/90 border border-slate-700 rounded-lg focus:outline-none text-white placeholder-gray-500 text-sm transition-all">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Company Name & Base Currency -->
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div class="sm:col-span-2">
-                    <label class="block text-xs font-semibold text-gray-300 uppercase tracking-wider mb-2">Company Name</label>
+                    <label class="block text-xs font-semibold text-gray-300 uppercase tracking-wider mb-1.5">Company Name *</label>
                     <div class="relative">
                         <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
                             <i class="fa-solid fa-building"></i>
                         </span>
-                        <input type="text" id="companyName" required placeholder="AeroCorp Industries" 
-                            class="w-full pl-10 pr-4 py-3 bg-slate-900/80 border border-slate-700 rounded-lg focus:outline-none focus:border-blue-500 text-white placeholder-gray-500 text-sm neon-glow transition-all">
+                        <input type="text" id="companyName" required placeholder="AeroCorp Global" 
+                            class="w-full pl-10 pr-4 py-3 bg-slate-900/90 border border-slate-700 rounded-lg focus:outline-none text-white placeholder-gray-500 text-sm transition-all">
                     </div>
                 </div>
                 <div>
-                    <label class="block text-xs font-semibold text-gray-300 uppercase tracking-wider mb-2">Currency</label>
-                    <select id="currency" class="w-full px-3 py-3 bg-slate-900/80 border border-slate-700 rounded-lg focus:outline-none focus:border-blue-500 text-white text-sm neon-glow transition-all">
+                    <label class="block text-xs font-semibold text-gray-300 uppercase tracking-wider mb-1.5">Currency</label>
+                    <select id="currency" class="w-full px-3 py-3 bg-slate-900/90 border border-slate-700 rounded-lg focus:outline-none text-white text-sm transition-all">
                         <option value="USD">USD ($)</option>
                         <option value="NGN">NGN (₦)</option>
                         <option value="EUR">EUR (€)</option>
@@ -95,32 +119,32 @@
 
             <!-- Password -->
             <div>
-                <label class="block text-xs font-semibold text-gray-300 uppercase tracking-wider mb-2">Password</label>
+                <label class="block text-xs font-semibold text-gray-300 uppercase tracking-wider mb-1.5">Password *</label>
                 <div class="relative">
                     <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
                         <i class="fa-solid fa-lock"></i>
                     </span>
                     <input type="password" id="password" required placeholder="••••••••••••" 
-                        class="w-full pl-10 pr-4 py-3 bg-slate-900/80 border border-slate-700 rounded-lg focus:outline-none focus:border-blue-500 text-white placeholder-gray-500 text-sm neon-glow transition-all">
+                        class="w-full pl-10 pr-4 py-3 bg-slate-900/90 border border-slate-700 rounded-lg focus:outline-none text-white placeholder-gray-500 text-sm transition-all">
                 </div>
             </div>
 
             <!-- Submit Button -->
             <button type="submit" id="submitBtn" 
-                class="w-full py-3.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold rounded-lg shadow-lg shadow-blue-500/30 transition-all flex items-center justify-center gap-2">
+                class="w-full mt-2 py-3.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold rounded-lg shadow-lg shadow-blue-500/30 transition-all flex items-center justify-center gap-2 tracking-wider">
                 <i class="fa-solid fa-user-plus"></i>
                 <span>INITIALIZE WORKSPACE</span>
             </button>
         </form>
 
-        <!-- Footer Links -->
+        <!-- Login Redirect Link -->
         <div class="mt-6 text-center text-xs text-gray-400">
             Already registered? 
             <a href="login.html" class="text-blue-400 hover:text-blue-300 font-semibold underline ml-1">Access Account</a>
         </div>
     </div>
 
-    <!-- JavaScript Handler -->
+    <!-- API Logic -->
     <script>
         const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzy5OVPf1zk4Quy_RvrictzgLVWFZ77E4VL1PnR7gcPexkffVCNoxsun0zceBMRBAxm/exec";
 
@@ -132,14 +156,17 @@
 
             // UI Loading state
             submitBtn.disabled = true;
-            submitBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> CREATING WORKSPACE...`;
+            submitBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> INITIALIZING WORKSPACE...`;
             alertBox.classList.add("hidden");
 
+            // Construct payload matching Code.gs handleSignup requirements
             const payload = {
                 action: "signup",
                 payload: {
                     fullName: document.getElementById("fullName").value.trim(),
                     email: document.getElementById("email").value.trim(),
+                    phoneNumber: document.getElementById("phoneNumber").value.trim(),
+                    country: document.getElementById("country").value.trim(),
                     companyName: document.getElementById("companyName").value.trim(),
                     currency: document.getElementById("currency").value,
                     password: document.getElementById("password").value
@@ -147,7 +174,6 @@
             };
 
             try {
-                // Apps Script requires POST requests via no-cors or standard text fetch
                 const response = await fetch(APPS_SCRIPT_URL, {
                     method: "POST",
                     headers: { "Content-Type": "text/plain;charset=utf-8" },
@@ -157,20 +183,20 @@
                 const result = await response.json();
 
                 if (result.status === "success") {
-                    showAlert("Account and Workspace initialized successfully! Redirecting to login...", "success");
+                    showAlert("Workspace and user registered successfully! Redirecting to login...", "success");
                     
-                    // Store local session fallback
+                    // Save user information locally
                     localStorage.setItem("quantum_user", JSON.stringify(result.data));
 
                     setTimeout(() => {
                         window.location.href = "login.html";
                     }, 2000);
                 } else {
-                    showAlert(result.message || "Signup failed. Please try again.", "error");
+                    showAlert(result.message || "Registration failed. Please try again.", "error");
                 }
 
             } catch (err) {
-                showAlert("Connection error to Google Apps Script. Please try again.", "error");
+                showAlert("Unable to connect to Apps Script backend. Please check your deployment.", "error");
                 console.error("Signup error:", err);
             } finally {
                 submitBtn.disabled = false;
