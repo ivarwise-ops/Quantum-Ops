@@ -188,7 +188,7 @@ const API_URL = "https://script.google.com/macros/s/AKfycbyfNAbemyRzGRfokWNHfr3T
 let itemCount = 0;
 let lastSaleData = null;
 function goToDashboard() {
-    window.location.href = "dashboard.html";
+    window.location.href = "quantum-ops-elite-dashboard.html";
 }
 function openNewSale() {
     document.getElementById('newSaleModal').classList.remove('hidden');
@@ -344,22 +344,21 @@ function renderTable(sales) {
     tbody.innerHTML = '';
     if (!sales.length) {
         tbody.innerHTML = `<tr><td colspan="6" class="p-8 text-center text-slate-500">No sales recorded yet</td></tr>`;
-        updateSummary(0, 0, 0);
         return;
     }
-    let todayTotal = 0, monthTotal = 0, count = sales.length;
+    let todayTotal = 0, monthTotal = 0, count = 0;
     const today = new Date().toISOString().slice(0,10);
-    const thisMonth = new Date().toISOString().slice(0,7);
     sales.forEach(s => {
         const amount = parseFloat(s.total_amount || s.AMOUNT || 0);
         const dateStr = (s.created_at || s.date || '').toString().slice(0,10);
+        count++;
         if (dateStr === today) todayTotal += amount;
-        if (dateStr.startsWith(thisMonth)) monthTotal += amount;
+        monthTotal += amount;
         const tr = document.createElement('tr');
         tr.className = 'hover:bg-slate-900/40 transition';
         tr.innerHTML = `
             <td class="p-4 text-sm">${dateStr || '-'}</td>
-            <td class="p-4 font-medium">${s.customer || s.customer_id || s.customer_name || '-'}</td>
+            <td class="p-4 font-medium">${s.customer || s.customer_id || '-'}</td>
             <td class="p-4 text-sm text-slate-400">Multiple items</td>
             <td class="p-4 text-right font-bold text-emerald-400">$${amount.toLocaleString()}</td>
             <td class="p-4 text-center">
@@ -370,7 +369,7 @@ function renderTable(sales) {
             <td class="p-4 text-center">
                 <button onclick='quickReceipt(${JSON.stringify({
                     saleId: s.sale_id || s.saleId || "-",
-                    customer: s.customer || s.customer_id || s.customer_name || "-",
+                    customer: s.customer || s.customer_id || "-",
                     date: dateStr,
                     time: "",
                     items: [{name:"Items", qty:1, price:amount, total:amount}],
@@ -383,9 +382,6 @@ function renderTable(sales) {
         `;
         tbody.appendChild(tr);
     });
-    updateSummary(todayTotal, monthTotal, count);
-}
-function updateSummary(todayTotal, monthTotal, count) {
     document.getElementById('todaySales').textContent = '$' + todayTotal.toLocaleString();
     document.getElementById('monthSales').textContent = '$' + monthTotal.toLocaleString();
     document.getElementById('txCount').textContent = count;
