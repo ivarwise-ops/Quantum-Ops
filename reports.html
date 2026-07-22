@@ -1,1 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quantum OPS Elite - Gateway</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            background-color: #080d1a;
+            color: #e2e8f0;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+        .glass-panel {
+            background: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(59, 130, 246, 0.25);
+            box-shadow: 0 10px 40px 0 rgba(0, 0, 0, 0.5);
+        }
+        .tab-btn.active {
+            background-color: rgba(59, 130, 246, 0.2);
+            border-color: #3b82f6;
+            color: #ffffff;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-4">
 
+    <div class="w-full max-w-lg glass-panel rounded-2xl p-8 relative overflow-hidden my-8">
+        
+        <!-- Header / Logo -->
+        <div class="text-center mb-6">
+            <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-blue-600/20 border border-blue-500/40 text-blue-400 mb-3 shadow-lg shadow-blue-500/10">
+                <i class="fa-solid fa-crown text-2xl"></i>
+            </div>
+            <h1 class="text-2xl font-bold tracking-wider text-white">QUANTUM OPS <span class="text-blue-500">ELITE</span></h1>
+            <p class="text-xs text-gray-400 mt-1 uppercase tracking-widest">Command Center Gateway</p>
+        </div>
+
+        <!-- Mode Toggle Switcher -->
+        <div class="grid grid-cols-2 gap-2 p-1 bg-slate-900/80 rounded-xl mb-6 border border-slate-800">
+            <button id="loginTabBtn" onclick="switchMode('login')" class="tab-btn active py-2.5 text-xs font-bold uppercase tracking-wider rounded-lg border border-transparent transition-all">
+                Login
+            </button>
+            <button id="signupTabBtn" onclick="switchMode('signup')" class="tab-btn py-2.5 text-xs font-bold uppercase tracking-wider rounded-lg border border-transparent transition-all text-gray-400 hover:text-white">
+                Register Workspace
+            </button>
+        </div>
+
+        <!-- Alert Notification Box -->
+        <div id="alert-box" class="hidden mb-6 p-4 rounded-lg text-sm font-medium transition-all"></div>
+
+        <!-- LOGIN FORM -->
+        <form id="loginForm" onsubmit="handleAuth(event, 'login')" class="space-y-4">
+            <div>
+                <label class="block text-xs font-semibold text-gray-300 uppercase tracking-wider mb-1.5">Work Email</label>
+                <div class="relative">
+                    <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
+                        <i class="fa-solid fa-envelope"></i>
+                    </span>
+                    <input type="email" id="loginEmail" required placeholder="commander@enterprise.com" 
+                        class="w-full pl-10 pr-4 py-3 bg-slate-900/90 border border-slate-700 rounded-lg focus:outline-none focus:border-blue-500 text-white placeholder-gray-500 text-sm transition-all">
+                </div>
+            </div>
+
+            <div>
+                <label class="block text-xs font-semibold text-gray-300 uppercase tracking-wider mb-1.5">Password</label>
+                <div class="relative">
+                    <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
+                        <i class="fa-solid fa-lock"></i>
+                    </span>
+                    <input type="password" id="loginPassword" required placeholder="••••••••••••" 
+                        class="w-full pl-10 pr-4 py-3 bg-slate-900/90 border border-slate-700 rounded-lg focus:outline-none focus:border-blue-500 text-white placeholder-gray-500 text-sm transition-all">
+                </div>
+            </div>
+
+            <button type="submit" id="loginSubmitBtn" 
+                class="w-full mt-2 py-3.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold rounded-lg shadow-lg shadow-blue-500/30 transition-all flex items-center justify-center gap-2 tracking-wider">
+                <i class="fa-solid fa-right-to-bracket"></i>
+                <span>AUTHENTICATE</span>
+            </button>
+        </form>
+
+        <!-- SIGNUP FORM (Hidden by default) -->
+        <form id="signupForm" onsubmit="handleAuth(event, 'signup')" class="space-y-4 hidden">
+            <div>
+                <label class="block text-xs font-semibold text-gray-300 uppercase tracking-wider mb-1.5">Full Name *</label>
+                <div class="relative">
+                    <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
+                        <i class="fa-solid fa-user"></i>
+                    </span>
+                    <input type="text" id="signupFullName" placeholder="Commander Alex Mercer" 
+                        class="w-full pl-10 pr-4 py-3 bg-slate-900/90 border border-slate-700 rounded-lg focus:outline-none focus:border-blue-500 text-white placeholder-gray-500 text-sm transition-all">
+                </div>
+            </div>
+
+            <div>
+                <label class="block text-xs font-semibold text-gray-300 uppercase tracking-wider mb-1.5">Work Email *</label>
+                <div class="relative">
+                    <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
+                        <i class="fa-solid fa-envelope"></i>
+                    </span>
+                    <input type="email" id="signupEmail" placeholder="alex@enterprise.com" 
+                        class="w-full pl-10 pr-4 py-3 bg-slate-900/90 border border-slate-700 rounded-lg focus:outline-none focus:border-blue-500 text-white placeholder-gray-500 text-sm transition-all">
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-xs font-semibold text-gray-300 uppercase tracking-wider mb-1.5">Phone Number</label>
+                    <input type="tel" id="signupPhone" placeholder="+1 (555) 000-0000" 
+                        class="w-full px-4 py-3 bg-slate-900/90 border border-slate-700 rounded-lg focus:outline-none focus:border-blue-500 text-white placeholder-gray-500 text-sm transition-all">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-gray-300 uppercase tracking-wider mb-1.5">Country</label>
+                    <input type="text" id="signupCountry" placeholder="United States" 
+                        class="w-full px-4 py-3 bg-slate-900/90 border border-slate-700 rounded-lg focus:outline-none focus:border-blue-500 text-white placeholder-gray-500 text-sm transition-all">
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div class="sm:col-span-2">
+                    <label class="block text-xs font-semibold text-gray-300 uppercase tracking-wider mb-1.5">Company Name *</label>
+                    <input type="text" id="signupCompanyName" placeholder="AeroCorp Global" 
+                        class="w-full px-4 py-3 bg-slate-900/90 border border-slate-700 rounded-lg focus:outline-none focus:border-blue-500 text-white placeholder-gray-500 text-sm transition-all">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-gray-300 uppercase tracking-wider mb-1.5">Currency</label>
+                    <select id="signupCurrency" class="w-full px-3 py-3 bg-slate-900/90 border border-slate-700 rounded-lg focus:outline-none focus:border-blue-500 text-white text-sm transition-all">
+                        <option value="USD">USD ($)</option>
+                        <option value="NGN">NGN (₦)</option>
+                        <option value="EUR">EUR (€)</option>
+                    </select>
+                </div>
+            </div>
+
+            <div>
+                <label class="block text-xs font-semibold text-gray-300 uppercase tracking-wider mb-1.5">Password *</label>
+                <div class="relative">
+                    <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
+                        <i class="fa-solid fa-lock"></i>
+                    </span>
+                    <input type="password" id="signupPassword" placeholder="••••••••••••" 
+                        class="w-full pl-10 pr-4 py-3 bg-slate-900/90 border border-slate-700 rounded-lg focus:outline-none focus:border-blue-500 text-white placeholder-gray-500 text-sm transition-all">
+                </div>
+            </div>
+
+            <button type="submit" id="signupSubmitBtn" 
+                class="w-full mt-2 py-3.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold rounded-lg shadow-lg shadow-blue-500/30 transition-all flex items-center justify-center gap-2 tracking-wider">
+                <i class="fa-solid fa-user-plus"></i>
+                <span>INITIALIZE WORKSPACE</span>
+            </button>
+        </form>
+    </div>
+
+    <script>
+        const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzy5OVPf1zk4Quy_RvrictzgLVWFZ77E4VL1PnR7gcPexkffVCNoxsun0zceBMRBAxm/exec";
+
+        function switchMode(mode) {
+            const loginForm = document.getElementById("loginForm");
+            const signupForm = document.getElementById("signupForm");
+            const loginBtn = document.getElementById("loginTabBtn");
+            const signupBtn = document.getElementById("signupTabBtn");
+            const alertBox = document.getElementById("alert-box");
+
+            alertBox.classList.add("hidden");
+
+            if (mode === "login") {
+                loginForm.classList.remove("hidden");
+                signupForm.classList.add("hidden");
+                loginBtn.classList.add("active");
+                signupBtn.classList.remove("active");
+            } else {
+                signupForm.classList.remove("hidden");
+                loginForm.classList.add("hidden");
+                signupBtn.classList.add("active");
+                loginBtn.classList.remove("active");
+            }
+        }
+
+        async function handleAuth(event, type) {
+            event.preventDefault();
+            
+            const submitBtn = document.getElementById(type === "login" ? "loginSubmitBtn" : "signupSubmitBtn");
+            const originalText = submitBtn.innerHTML;
+
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> PROCESSING...`;
+
+            let payloadData = { action: type, payload: {} };
+
+            if (type === "login") {
+                payloadData.payload = {
+                    email: document.getElementById("loginEmail").value.trim(),
+                    password: document.getElementById("loginPassword").value,
+                    device: navigator.userAgent
+                };
+            } else {
+                payloadData.payload = {
+                    fullName: document.getElementById("signupFullName").value.trim(),
+                    email: document.getElementById("signupEmail").value.trim(),
+                    phoneNumber: document.getElementById("signupPhone").value.trim(),
+                    country: document.getElementById("signupCountry").value.trim(),
+                    companyName: document.getElementById("signupCompanyName").value.trim(),
+                    currency: document.getElementById("signupCurrency").value,
+                    password: document.getElementById("signupPassword").value
+                };
+            }
+
+            try {
+                const response = await fetch(APPS_SCRIPT_URL, {
+                    method: "POST",
+                    headers: { "Content-Type": "text/plain;charset=utf-8" },
+                    body: JSON.stringify(payloadData)
+                });
+
+                const result = await response.json();
+
+                if (result.status === "success") {
+                    if (type === "signup") {
+                        showAlert("Workspace created! Switch to Login tab to sign in.", "success");
+                        setTimeout(() => switchMode("login"), 1500);
+                    } else {
+                        showAlert("Authentication successful! Loading Dashboard...", "success");
+                        localStorage.setItem("quantum_token", result.data.token);
+                        localStorage.setItem("quantum_company_id", result.data.companyId);
+                        localStorage.setItem("quantum_user", JSON.stringify(result.data));
+
+                        setTimeout(() => {
+                            window.location.href = "quantum-ops-elite-dashboard.html";
+                        }, 1200);
+                    }
+                } else {
+                    showAlert(result.message || "Operation failed. Please try again.", "error");
+                }
+
+            } catch (err) {
+                showAlert("Connection error to Google Apps Script.", "error");
+                console.error("Auth error:", err);
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = originalText;
+            }
+        }
+
+        function showAlert(message, type) {
+            const alertBox = document.getElementById("alert-box");
+            alertBox.classList.remove("hidden", "bg-red-500/20", "border-red-500", "text-red-300", "bg-green-500/20", "border-green-500", "text-green-300");
+
+            if (type === "success") {
+                alertBox.classList.add("bg-green-500/20", "border", "border-green-500", "text-green-300");
+            } else {
+                alertBox.classList.add("bg-red-500/20", "border", "border-red-500", "text-red-300");
+            }
+            alertBox.innerText = message;
+        }
+    </script>
+</body>
+</html>
