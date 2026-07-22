@@ -3,29 +3,149 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sales | Quantum Ops Elite</title>
+    <title>Sales - Quantum OPS Elite</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body { font-family: 'Rajdhani', sans-serif; background: #030610; color: #e2e8f0; }
+        .panel-glow { background: rgba(10,15,29,0.95); border: 1px solid rgba(0,240,255,0.2); backdrop-filter: blur(12px); }
+        .neon-cyan { color: #00f0ff; text-shadow: 0 0 10px rgba(0,240,255,0.6); }
+    </style>
 </head>
-<body class="bg-slate-950 text-white p-8">
-    <h1 class="text-3xl font-bold mb-8">Sales & Invoices</h1>
-    
-    <div class="bg-slate-900 border border-slate-700 rounded-3xl p-6">
-        <button onclick="loadSales()" class="px-4 py-2 bg-purple-600 rounded-2xl mb-4">Load Sales</button>
-        <div id="salesList"></div>
+<body class="min-h-screen p-6">
+
+    <div class="max-w-7xl mx-auto">
+        <div class="flex justify-between items-center mb-8">
+            <h1 class="text-3xl font-bold neon-cyan">SALES MODULE</h1>
+            <button onclick="window.location.href='dashboard.html'" class="px-6 py-2 bg-slate-800 hover:bg-slate-700 rounded-xl flex items-center gap-2">
+                <i class="fa-solid fa-arrow-left"></i> Back to Dashboard
+            </button>
+        </div>
+
+        <!-- Summary Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+            <div class="panel-glow p-6 rounded-2xl">
+                <p class="text-sm text-slate-400">TOTAL SALES TODAY</p>
+                <p class="text-4xl font-digital font-bold text-emerald-400" id="todaySales">$9,850</p>
+            </div>
+            <div class="panel-glow p-6 rounded-2xl">
+                <p class="text-sm text-slate-400">THIS MONTH</p>
+                <p class="text-4xl font-digital font-bold text-cyan-400" id="monthSales">$99,850</p>
+            </div>
+            <div class="panel-glow p-6 rounded-2xl">
+                <p class="text-sm text-slate-400">AVERAGE SALE</p>
+                <p class="text-4xl font-digital font-bold text-amber-400" id="avgSale">$2,080</p>
+            </div>
+            <div class="panel-glow p-6 rounded-2xl">
+                <p class="text-sm text-slate-400">TRANSACTIONS</p>
+                <p class="text-4xl font-digital font-bold text-purple-400" id="transactions">48</p>
+            </div>
+        </div>
+
+        <!-- New Sale Button -->
+        <button onclick="showNewSaleModal()" class="mb-6 px-8 py-3 bg-cyan-600 hover:bg-cyan-500 rounded-2xl font-bold flex items-center gap-3 text-lg">
+            <i class="fa-solid fa-plus"></i> NEW SALE
+        </button>
+
+        <!-- Sales Table -->
+        <div class="panel-glow rounded-2xl overflow-hidden">
+            <table class="w-full">
+                <thead class="bg-slate-900">
+                    <tr>
+                        <th class="p-4 text-left">DATE</th>
+                        <th class="p-4 text-left">CUSTOMER</th>
+                        <th class="p-4 text-left">ITEM</th>
+                        <th class="p-4 text-right">AMOUNT</th>
+                        <th class="p-4 text-center">STATUS</th>
+                    </tr>
+                </thead>
+                <tbody id="salesTable" class="divide-y divide-slate-800"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- New Sale Modal -->
+    <div id="newSaleModal" class="hidden fixed inset-0 bg-black/80 flex items-center justify-center z-50">
+        <div class="bg-[#050814] border border-cyan-500 rounded-3xl p-8 w-full max-w-md">
+            <h2 class="text-2xl font-bold mb-6 text-cyan-400">New Sale</h2>
+            <input id="saleCustomer" placeholder="Customer Name" class="w-full mb-4 p-4 bg-slate-900 rounded-2xl">
+            <input id="saleItem" placeholder="Item / Service" class="w-full mb-4 p-4 bg-slate-900 rounded-2xl">
+            <input id="saleAmount" type="number" placeholder="Amount" class="w-full mb-6 p-4 bg-slate-900 rounded-2xl">
+            <div class="flex gap-4">
+                <button onclick="hideNewSaleModal()" class="flex-1 py-4 bg-slate-800 rounded-2xl">Cancel</button>
+                <button onclick="saveNewSale()" class="flex-1 py-4 bg-emerald-600 rounded-2xl font-bold">Save Sale</button>
+            </div>
+        </div>
     </div>
 
     <script>
-        const API_URL = "https://script.google.com/macros/s/AKfycbzer7oCcXJVNUroa_TYHEnJx4KxTFnX4mGmrpf7y-WVH8DbQ-b1QyGkDIs_wTaQtxCs/exec";
-        
+        const API_URL = "https://script.google.com/macros/s/AKfycbzy5OVPf1zk4Quy_RvrictzgLVWFZ77E4VL1PnR7gcPexkffVCNoxsun0zceBMRBAxm/exec";
+
         async function loadSales() {
-            const res = await fetch(API_URL, {
-                method: "POST",
-                body: JSON.stringify({ action: "getSales" })
-            });
-            const data = await res.json();
-            const container = document.getElementById('salesList');
-            container.innerHTML = JSON.stringify(data, null, 2);
+            try {
+                const res = await fetch(API_URL, {
+                    method: 'POST',
+                    body: JSON.stringify({ action: 'getSales' })
+                });
+                const data = await res.json();
+                renderSalesTable(data.data || []);
+            } catch(e) {
+                console.error(e);
+            }
         }
+
+        function renderSalesTable(sales) {
+            const tbody = document.getElementById('salesTable');
+            tbody.innerHTML = '';
+            sales.forEach(s => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td class="p-4">${s.date || 'Today'}</td>
+                    <td class="p-4">${s.customer}</td>
+                    <td class="p-4">${s.item}</td>
+                    <td class="p-4 text-right font-bold text-emerald-400">$${parseFloat(s.amount).toLocaleString()}</td>
+                    <td class="p-4 text-center"><span class="px-4 py-1 bg-emerald-900 text-emerald-400 rounded-full text-xs">PAID</span></td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function showNewSaleModal() {
+            document.getElementById('newSaleModal').classList.remove('hidden');
+        }
+
+        function hideNewSaleModal() {
+            document.getElementById('newSaleModal').classList.add('hidden');
+        }
+
+        async function saveNewSale() {
+            const customer = document.getElementById('saleCustomer').value;
+            const item = document.getElementById('saleItem').value;
+            const amount = document.getElementById('saleAmount').value;
+
+            if (!customer || !item || !amount) return alert("Fill all fields");
+
+            try {
+                await fetch(API_URL, {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        action: 'addSale',
+                        customer: customer,
+                        item: item,
+                        amount: amount
+                    })
+                });
+                alert("Sale saved successfully!");
+                hideNewSaleModal();
+                loadSales();
+            } catch(e) {
+                alert("Error saving sale");
+            }
+        }
+
+        // Load on start
+        window.onload = loadSales;
     </script>
 </body>
 </html>
